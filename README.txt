@@ -27,11 +27,19 @@ Default configuration:
 ------------>--------------------------------------------
   Stepper 1:  8,9,10,11
   Stepper 2:  4,5,6,7
-  Stepper 3:  17,16,19,18 (19,18,17,16 for v2 boards) 
+  Stepper 3:  A5,A4,A3,A2 (digital out 19,18,17,16)               
   12V out 1:  2
   12V out 2:  3
   Laser out:  13
   Servo out:  12
+  Unused   :  A0,A1,A6,A7 (A6 and A7 cannot be used as output) 
+
+System Reset and Initialization routine
+---------------------------------------
+  Upon reset or power up the controller attempts to move all
+  axis into their minimal position by traversing the configured
+  distance into a solid zero position block - builds should be
+  designed to cope with this. 
 
 Device-specific values and devices
 ==================================
