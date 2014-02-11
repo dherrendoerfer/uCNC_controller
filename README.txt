@@ -20,6 +20,15 @@
 uCNC_controller Readme file:
 ============================
 
+uCNC_controller is a g-code interpreting controller app that is intended
+for use on the Arduino platform. It interprets a number of g-code 
+commands and controls a number of unipolar stepper motors (3), some 
+digital outputs (2), and number of servos (1) accordingly.
+It is intended for use in home or educational projects, and as the 
+license states: it comes with no waranty whatsoever. If you use it
+and it breaks in your hands, you get to keep all the pieces.
+
+
 Default configuration:
 ======================
 
@@ -54,6 +63,12 @@ Control ports:
 
 Device-specific G-Code commands:
 ================================
+  NOTE: All of these settings can be made in the source code of the
+        controller applivation, and should in fact be made there.
+        The possibility to change them is intended to make it possible
+        to create a controller module that can be shared between 
+        several installations, and that is configured by the init
+        sequence of its controlling host.
 
 M150: Set Z-Axis mode
 ---------------------
@@ -112,7 +127,8 @@ M154: Set servo Z factor
 Sets the ratio between the Z value and the servo position in degrees.
 
   Note: The Z value at factor 1 is -89 to +90, this also honors the minimum
-        and max values set to the servo, so set them to 0 for full stroke.
+        and max values set to the servo, so set them to 0 and 180 for full 
+        stroke. The sign of this value determines the direction of the servo.
 
   Sample:
     M154 S0.1  ;Sets ratio to 0.1
@@ -121,7 +137,8 @@ Sets the ratio between the Z value and the servo position in degrees.
 M160: Set X-Axis step to mm ratio
 ---------------------------------
 Sets the calibration value of the X-Axis in relation to the steps needed to
-travel 1 milimeter.
+travel 1 milimeter. The sign of this value determines the direction of the 
+stepper.
 
   Sample:
     M160 S17.1  ;Sets the ratio of the X-Axis to 17.1 steps per milimeter
@@ -129,7 +146,8 @@ travel 1 milimeter.
 M161: Set Y-Axis step to mm ratio
 ---------------------------------
 Sets the calibration value of the Y-Axis in relation to the steps needed to
-travel 1 milimeter.
+travel 1 milimeter. The sign of this value determines the direction of the 
+stepper.
 
   Sample:
     M161 S17.1  ;Sets the ratio of the Y-Axis to 17.1 steps per milimeter
@@ -137,7 +155,8 @@ travel 1 milimeter.
 M162: Set Z-Axis step to mm ratio
 ---------------------------------
 Sets the calibration value of the Z-Axis in relation to the steps needed to
-travel 1 milimeter.
+travel 1 milimeter. The sign of this value determines the direction of the 
+stepper.
 
   Sample:
     M162 S17.1  ;Sets the ratio of the X-Axis to 17.1 steps per milimeter
