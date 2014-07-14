@@ -120,7 +120,7 @@ void moveY(int dY)
   case 3:
     int i;
     for (i=0;i<abs(dY);i++) {
-      myStepper3.setSpeed(0); //stepper3 is always driven with stepper2
+      myStepper3.setSpeed(MAX_SPEED); //stepper3 is always driven with stepper2
       myStepper3.step((dY < 1) ? -1 : 1);
       myStepper2.step((dY < 1) ? -1 : 1);
     }
