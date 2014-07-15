@@ -21,7 +21,7 @@
 #include "uCNC.h"
 
 /* Version of this progam */
-float uCNC_Version = 1.0;
+float uCNC_Version = 1.99;
 
 /* Development functions - broken code*/
 //#define BUILTIN 1
