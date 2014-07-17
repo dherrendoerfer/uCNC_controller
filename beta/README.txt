@@ -17,6 +17,10 @@
  *   along with uCNC_controller.  If not, see <http://www.gnu.org/licenses/>.
  *
 
+ ********************** BETA version ALERT !!!!!! **************************
+THIS IS BETA CODE, IT MAY BE INCOMPLETE OR BROKEN. YOU HAVE BEEN WARNED.
+
+
 uCNC_controller Readme file:
 ============================
 
@@ -45,11 +49,27 @@ Default configuration:
 
 System Reset and Initialization routine
 ---------------------------------------
-  Upon reset or power up the controller attempts to move all
-  axis into their minimal position by traversing the configured
-  distance into a solid zero position block - builds should be
-  designed to cope with this. 
+  Depending on the configuration the controller will:
+  1. Do nothing. Home is where the power was swithed on.
+  2. Upon reset or power up the controller attempts to move all
+    axis into their minimal position by traversing the configured
+    distance into a solid zero position block - builds should be
+    designed to cope with this. 
+  3. Try to touch an end switch on each axis, release it and assume
+    that position is zero.
 
+Stepper configuration
+---------------------
+  The controller supports acceleration and braking. Each stepper can
+  be configured with a start step frequency, and an increment and limit
+  value. This is honored for G0 and G1 travel.
+  The controller also supports slack/backlash compensation. Each stepper
+  may be configured to add a number of steps at each change of direction.
+  Resolution: Depending on the setup, the total resolution may be changed by
+  adapting the raw position data type. An int gives you 64k positions on each
+  axis, long 4G. But this increases the size of the sketch considerably.
+  
+  
 Device-specific values and devices
 ==================================
 
@@ -69,6 +89,8 @@ Device-specific G-Code commands:
         to create a controller module that can be shared between 
         several installations, and that is configured by the init
         sequence of its controlling host.
+        It is not possible to switch between modes or resolutions 
+        while the controller is running. 
 
 M150: Set Z-Axis mode
 ---------------------
