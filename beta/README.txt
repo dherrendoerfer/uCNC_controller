@@ -50,12 +50,13 @@ Default configuration:
 System Reset and Initialization routine
 ---------------------------------------
   Depending on the configuration the controller will:
-  1. Do nothing. Home is where the power was swithed on.
+  1. Do nothing. Home is where the power was switched on.
+     (G28 may lead to the controller to seek home)
   2. Upon reset or power up the controller attempts to move all
     axis into their minimal position by traversing the configured
     distance into a solid zero position block - builds should be
     designed to cope with this. 
-  3. Try to touch an end switch on each axis, release it and assume
+  3. Try to touch an end switch on each axis, release it, and assume
     that position is zero.
 
 Stepper configuration
