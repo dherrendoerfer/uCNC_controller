@@ -25,6 +25,17 @@
  * and acceleration code regarding the use in CNC type machines.
  */
 
+/* README:
+This file contains the drivers for 3 types of stepper controllers.
+By choosing the appropriate constructor you choose the driver.
+Available are:
+
+2Pin: Bipolar driver for double-h bar driver chips
+3pin: Bipolad driver for A4988 or similar chips with direction and step 
+      interface and enable
+4pin: Unipolar stepper driver for use with ULN2003/2004 driver ICs
+*/
+
 #ifdef STEPPER_2PIN
 /*
  * two-wire constructor.

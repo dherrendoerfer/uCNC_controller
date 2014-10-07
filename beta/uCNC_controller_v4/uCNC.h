@@ -23,7 +23,7 @@
 typedef long posval_t;
 
 /* Define these according to your driver board design 
-    currently only 3pin 4pin is supported */
+   Only define the ones you want/need this saves memory */
 //#define STEPPER_2PIN 1
 #define STEPPER_3PIN 1
 #define STEPPER_4PIN 1

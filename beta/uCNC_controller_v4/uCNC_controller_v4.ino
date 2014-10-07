@@ -23,6 +23,10 @@
 /* Version of this progam */
 float uCNC_Version = 1.99;
 
+/* Version of the controller board in use.*/
+//#define V1_BOARD 1
+#define V4_BOARD 1
+
 /* Development functions - broken code */
 //#define BUILTIN 1
 //#define BROKEN 1
@@ -47,15 +51,15 @@ float uCNC_Version = 1.99;
    freqency, which is the start step rate in HZ.
    The ramp rise is set with the Ramp value */
 float stepsPerMillimeter_X = -80;
-int   stepIssueFrequency_X  = 400;
+int   stepIssueFrequency_X  = 800;
 int   stepIssueFreqRamp_X = 10;
-int   stepIssueFrequencyRampMax_X  = 3000;
+int   stepIssueFrequencyRampMax_X  = 2000;
 int   stepDriveSlack_X = 0;
 
 float stepsPerMillimeter_Y = 80;
-int   stepIssueFrequency_Y  = 400;
+int   stepIssueFrequency_Y  = 800;
 int   stepIssueFreqRamp_Y = 10;
-int   stepIssueFrequencyRampMax_Y  = 3000;
+int   stepIssueFrequencyRampMax_Y  = 2000;
 int   stepDriveSlack_Y = 0;
 
 float stepsPerMillimeter_Z = 300;
@@ -67,10 +71,38 @@ int   stepDriveSlack_Z = 0;
 /* Unit conversion factor */
 float conversionFactor = 1;  // 1 for mm 25.4 for inches
 
-/* Stepper library initialization */
+/* Stepper library initialization 
+   README:
+   Depending on the type of control board you
+   are using there big diffenences here.
+   Refer to the code in uCNC_stepper.cpp to understand
+   the code, and and make the right choices here. */
+#ifdef V4_BOARD
 Stepper myStepperX(10,11,7);
 Stepper myStepperY(8,9,7);            
+//Stepper myStepperZ(2,4,7);            
 Stepper myStepperZ(18,16,17,19,0);
+
+/* General purpose outputs */
+#define LED_PIN    13   //LED/LASER output
+#define GP1_PIN     6   //General pupose (coolant 1) output
+#define GP2_PIN     5   //General pupose (coolant 2) output
+#define GP3_PIN     3   //General pupose
+#define SERVO_PIN  12   //Servo output
+#endif
+
+#ifdef V1_BOARD
+Stepper myStepperX(8,10,9,11);
+Stepper myStepperY(4,6,5,7);            
+Stepper myStepperZ(18,19,17,16);
+
+/* General purpose outputs */
+#define LED_PIN    13   //LED/LASER output
+#define GP1_PIN     2   //General pupose (coolant 1) output
+#define GP2_PIN     3   //General pupose (coolant 2) output
+#define GP3_PIN    -1   //General pupose
+#define SERVO_PIN  12   //Servo output
+#endif
 
 /* Servo functions and limits */
 Servo myServo;
@@ -115,12 +147,6 @@ int coolant2 = 0;
 
 /* Spindle speed (M3 parameter)*/
 int spindleSpeed = 0;
-
-/* General purpose outputs */
-#define LED_PIN  13   //LED/LASER output
-#define GP1_PIN   6   //General pupose (coolant 1) output
-#define GP2_PIN   5   //General pupose (coolant 2) output
-#define GP3_PIN   3   //General pupose
 
 #define COMMAND_SIZE 128
 uint8_t command_line[COMMAND_SIZE];

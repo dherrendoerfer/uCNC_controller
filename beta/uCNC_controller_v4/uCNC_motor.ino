@@ -77,7 +77,7 @@ void initMotors()
   myStepperY.setSlack(stepDriveSlack_Y);
   myStepperZ.setSlack(stepDriveSlack_Z);
 
-  myServo.attach(12);
+  myServo.attach(SERVO_PIN);
   myServo.write(servoPosMax);
 }
 
