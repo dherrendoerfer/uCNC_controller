@@ -91,51 +91,65 @@ void homeXYZ()
   }
 #ifdef DO_RESET  
   if (have_endswitch) {
-    /* if the end-switch is on go forward a bit */
+    /* Go (slowly) into each end-switch-on position and back out
+     * until the switch opens, and then some more.
+     * The direction is derived from the sign values of the 
+     * distance calculation base values.  
+     *
+     * if the end-switch is on go forward a bit 
+     */
+     
     if (analogRead(0) > 200)
-      moveX(100*sgn(stepsPerMillimeter_X)); 
+      myStepper1.step(50*sgn(stepsPerMillimeter_X), RESET_TRAVEL_STEP_DELAY); 
     if (analogRead(0) > 200)
-      moveY(100*sgn(stepsPerMillimeter_Y)); 
+      myStepper2.step(50*sgn(stepsPerMillimeter_Y), RESET_TRAVEL_STEP_DELAY); 
     if (motorMode==0 && analogRead(0) > 200)
-      moveZ(100*sgn(stepsPerMillimeter_Z)); 
+      myStepper3.step(50*sgn(stepsPerMillimeter_Z), RESET_TRAVEL_STEP_DELAY); 
     
     if (analogRead(0) > 200) // fail, switch is still on
       return;    
     
-    while(i++<2000 && analogRead(0) < 200)
-      moveX(-1*sgn(stepsPerMillimeter_X));
+    while(i++<RESET_TRAVEL_X && analogRead(0) < 200)
+      myStepper1.step(-1*sgn(stepsPerMillimeter_X), RESET_TRAVEL_STEP_DELAY);
     i=0;
-    while(i++<20 && analogRead(0) > 200)
-      moveX(1*sgn(stepsPerMillimeter_X));
+    while(i++<200 && analogRead(0) > 200)
+      myStepper1.step(1*sgn(stepsPerMillimeter_X), RESET_TRAVEL_STEP_DELAY*20);
+    myStepper1.step(RESET_PRELOAD_X*sgn(stepsPerMillimeter_X), RESET_TRAVEL_STEP_DELAY);
 
     i=0;
-    while(i++<2000 && analogRead(0) < 200)
-      moveY(-1*sgn(stepsPerMillimeter_Y));
+    while(i++<RESET_TRAVEL_Y && analogRead(0) < 200)
+      myStepper2.step(-1*sgn(stepsPerMillimeter_Y), RESET_TRAVEL_STEP_DELAY);
     i=0;
-    while(i++<20 && analogRead(0) > 200)
-      moveY(1*sgn(stepsPerMillimeter_Y));
+    while(i++<200 && analogRead(0) > 200)
+      myStepper2.step(1*sgn(stepsPerMillimeter_Y), RESET_TRAVEL_STEP_DELAY*20);
+    myStepper2.step(RESET_PRELOAD_Y*sgn(stepsPerMillimeter_Y), RESET_TRAVEL_STEP_DELAY);
 
     if (motorMode == 0) {
       i=0;
-      while(i++<2000 && analogRead(0) < 200)
-        moveZ(-1*sgn(stepsPerMillimeter_Z));
+      while(i++<RESET_TRAVEL_Z && analogRead(0) < 200)
+        myStepper3.step(-1*sgn(stepsPerMillimeter_Z), RESET_TRAVEL_STEP_DELAY);
       i=0;
-      while(i++<20 && analogRead(0) > 200)
-        moveZ(1*sgn(stepsPerMillimeter_Z));
+      while(i++<200 && analogRead(0) > 200)
+        myStepper3.step(1*sgn(stepsPerMillimeter_Z), RESET_TRAVEL_STEP_DELAY*20);
+      myStepper3.step(RESET_PRELOAD_Z*sgn(stepsPerMillimeter_Z), RESET_TRAVEL_STEP_DELAY);
     }
     
   } else {
-    myStepper1.step(RESET_TRAVEL_X);
-    myStepper2.step(RESET_TRAVEL_Y);
+    /* Reset the position by moving a defined distance, (into a block)
+    *  and then a defined distance back out again.
+    */ 
+    myStepper1.step(-1*sgn(stepsPerMillimeter_X)*RESET_TRAVEL_X, RESET_TRAVEL_STEP_DELAY);
+    myStepper2.step(-1*sgn(stepsPerMillimeter_Y)*RESET_TRAVEL_Y, RESET_TRAVEL_STEP_DELAY);
     if (motorMode == 0) {
-      myStepper3.step(RESET_TRAVEL_Z);
+      myStepper3.step(-1*sgn(stepsPerMillimeter_Z)*RESET_TRAVEL_Z, RESET_TRAVEL_STEP_DELAY);
       delay(500);
-      myStepper3.step(RESET_PRELOAD_Z);
+      myStepper3.step(sgn(stepsPerMillimeter_Z)*RESET_PRELOAD_Z, RESET_TRAVEL_STEP_DELAY);
     }
-    myStepper2.step(RESET_PRELOAD_Y);
-    myStepper1.step(RESET_PRELOAD_X);
+    myStepper2.step(sgn(stepsPerMillimeter_Y)*RESET_PRELOAD_Y, RESET_TRAVEL_STEP_DELAY);
+    myStepper1.step(sgn(stepsPerMillimeter_X)*RESET_PRELOAD_X, RESET_TRAVEL_STEP_DELAY);
   }
 #endif  
+  /* Reset this position to be 0,0,0 */
   resetPosXYZ();
 }
 
@@ -439,9 +453,9 @@ void lineXYZ(posval_t x2, posval_t y2, posval_t z2, float feedrate)
   long time=0;
   long laststep = 0;
   
-  int delay_X=60000/(fabs(stepsPerMillimeter_X) * feedrate);
-  int delay_Y=60000/(fabs(stepsPerMillimeter_Y) * feedrate);
-  int delay_Z=60000/(fabs(stepsPerMillimeter_Z) * feedrate);
+  int delay_X=6000/(fabs(stepsPerMillimeter_X) * feedrate);
+  int delay_Y=6000/(fabs(stepsPerMillimeter_Y) * feedrate);
+  int delay_Z=6000/(fabs(stepsPerMillimeter_Z) * feedrate);
     
   moveToXYZ(drawx, drawy, drawz, 0, 0, 0);
   laststep=millis();

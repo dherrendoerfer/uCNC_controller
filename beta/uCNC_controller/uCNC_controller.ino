@@ -36,9 +36,9 @@ float uCNC_Version = 1.99;
 //#define COMPLEX_MOVE 1
 
 /* Define this if you want the machine to perform
-   a reset during startup, else, the first set_home
-   or go_home will initialize it.*/
-//#define DO_RESET 1
+   a reset with the first G28 command, else, the 
+   first set_home will initialize it.*/
+#define DO_RESET 1
 
 /* Conversion factor of steps per millimeter 
    use the slack/backlash variable, if you have
@@ -46,22 +46,22 @@ float uCNC_Version = 1.99;
    The RampMax value is added on top of the step
    freqency, which is the start step rate in HZ.
    The ramp rise is set with the Ramp value */
-float stepsPerMillimeter_X = -10000L / 49.5;
-int   stepIssueFrequency_X  = 600;
-int   stepIssueFreqRamp_X = 5;
-int   stepIssueFrequencyRampMax_X  = 500;
+float stepsPerMillimeter_X = -10000L / 49.5; 
+int   stepIssueFrequency_X  = 400;
+int   stepIssueFreqRamp_X = 4;
+int   stepIssueFrequencyRampMax_X  = 220;
 int   stepDriveSlack_X = 60;
 
 float stepsPerMillimeter_Y = 10000L / 49.5;
-int   stepIssueFrequency_Y  = 600;
-int   stepIssueFreqRamp_Y = 5;
-int   stepIssueFrequencyRampMax_Y  = 300;
-int   stepDriveSlack_Y = 80;
+int   stepIssueFrequency_Y  = 400;
+int   stepIssueFreqRamp_Y = 4;
+int   stepIssueFrequencyRampMax_Y  = 220;
+int   stepDriveSlack_Y = 60;
 
 float stepsPerMillimeter_Z = 10;
 int   stepIssueFrequency_Z  = 1000;
-int   stepIssueFreqRamp_Z = 10;
-int   stepIssueFrequencyRampMax_Z  = 200;
+int   stepIssueFreqRamp_Z = 3;
+int   stepIssueFrequencyRampMax_Z  = 150;
 int   stepDriveSlack_Z = 0;
 
 /* Unit conversion factor */
@@ -70,7 +70,7 @@ float conversionFactor = 1;  // 1 for mm 25.4 for inches
 /* Stepper library initialization */
 Stepper myStepper1(8,10,9,11);
 Stepper myStepper2(4,6,5,7);            
-Stepper myStepper3(18,16,17,19);
+Stepper myStepper3(18,19,17,16);
 
 /* Servo functions and limits */
 Servo myServo;
@@ -94,12 +94,13 @@ boolean pos_known = false;
 /* Set to true if there is are end-switches on A0 */
 boolean have_endswitch = false;
 
-/* For non-endswitch reset */
-#define RESET_TRAVEL_X -1500
-#define RESET_TRAVEL_Y -1500
-#define RESET_TRAVEL_Z -1500
-#define RESET_PRELOAD_X 20
-#define RESET_PRELOAD_Y 400
+/* reset travel distances in steps */
+#define RESET_TRAVEL_X 15000
+#define RESET_TRAVEL_Y 15000
+#define RESET_TRAVEL_Z 1500
+#define RESET_TRAVEL_STEP_DELAY 1 
+#define RESET_PRELOAD_X 200
+#define RESET_PRELOAD_Y 200
 #define RESET_PRELOAD_Z 0
 
 /* X,Y,Z in measurement value*/

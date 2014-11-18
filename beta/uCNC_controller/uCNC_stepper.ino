@@ -120,6 +120,18 @@ int Stepper::chk(long frequency, int noblock)
   return 0;
 }
 
+void Stepper::step(int steps, int delay_ms)
+{
+  int i;
+  for (i=0;i<abs(steps);i++) {
+    this->step_number += sgn(steps);
+    this->last_step_time = millis();
+    stepMotor(this->step_number % 8);
+
+    delay(delay_ms);
+  }
+}
+
 void Stepper::unslack(int direction)
 {
   int i;

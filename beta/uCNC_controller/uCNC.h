@@ -42,6 +42,7 @@ class Stepper {
     void setSpeed(int whatSpeed);
     void setSlack(int slack);
     void update(int step_to_move);
+    void step(int steps, int delay_ms);
     void powerdown();
 
   private:
