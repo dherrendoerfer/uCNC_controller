@@ -1,0 +1,11 @@
+Included here is a prototype layout for a controller circuit.
+This controller circuit is identical to the Controller.brd 
+with the exception that the Laser is driven with 12V VCC, not 5V.
+
+Controller_v1.brd
+--------------
+  The layout source file
+
+Controller_v1.sch
+--------------
+  The schematic source file.
