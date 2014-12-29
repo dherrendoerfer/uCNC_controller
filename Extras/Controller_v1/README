@@ -1,6 +1,8 @@
 Included here is a prototype layout for a controller circuit.
 This controller circuit is identical to the Controller.brd 
-with the exception that the Laser is driven with 12V VCC, not 5V.
+with the exception that the Laser is driven with 12V, not 5V.
+
+-- Beta warning: this has not jet been fully tested by me.
 
 Controller_v1.brd
 --------------
@@ -9,3 +11,12 @@ Controller_v1.brd
 Controller_v1.sch
 --------------
   The schematic source file.
+
+  Controller_v1.hpgl, Controller_v1.ps
+--------------------------------------
+  Exported layout formats of the above board
+
+Controller_v1.hpgl.nc
+---------------------
+  A g-code sample file that will produce a plot of the above
+  board using the included board and firmware.
