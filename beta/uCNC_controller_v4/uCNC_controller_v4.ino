@@ -176,6 +176,7 @@ void clear_command_string() {
 void loop() {
   uint8_t c;
   
+  Serial.println("uCNC_controller_v4 (compatible: Grbl v0.81, Repetier 0.80, E3D v1.00)");
   Serial.println("ready");
 
   while (true) {
