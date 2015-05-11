@@ -92,9 +92,9 @@ Stepper myStepperZ(18,16,17,19,0);
 #endif
 
 #ifdef V1_BOARD
-Stepper myStepperX(8,10,9,11);
-Stepper myStepperY(4,6,5,7);            
-Stepper myStepperZ(18,19,17,16);
+Stepper myStepperX(8,10,9,11,0);
+Stepper myStepperY(4,6,5,7,0);            
+Stepper myStepperZ(18,19,17,16,0);
 
 /* General purpose outputs */
 #define LED_PIN    13   //LED/LASER output
