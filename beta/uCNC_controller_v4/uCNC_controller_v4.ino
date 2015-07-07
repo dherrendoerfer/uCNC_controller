@@ -104,6 +104,19 @@ Stepper myStepperZ(18,19,17,16,0);
 #define SERVO_PIN  12   //Servo output
 #endif
 
+#ifdef GRBL_BOARD
+Stepper myStepperX(5,2,8);
+Stepper myStepperY(6,3,8);            
+Stepper myStepperZ(7,4,8);            
+
+/* General purpose outputs */
+#define LED_PIN    12   //LED/LASER output
+#define GP1_PIN    A3   //General pupose (coolant 1) output
+#define GP2_PIN    A4   //General pupose (coolant 2) output
+#define GP3_PIN    13   //General pupose
+#define SERVO_PIN  A5   //Servo output
+#endif
+
 /* Servo functions and limits */
 Servo myServo;
 
