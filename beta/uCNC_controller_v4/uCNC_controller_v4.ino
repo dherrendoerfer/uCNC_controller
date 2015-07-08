@@ -74,7 +74,7 @@ float conversionFactor = 1;  // 1 for mm 25.4 for inches
 /* Stepper library initialization 
    README:
    Depending on the type of control board you
-   are using there big diffenences here.
+   are using, there are big diffenences here.
    Refer to the code in uCNC_stepper.cpp to understand
    the code, and and make the right choices here. */
 #ifdef V4_BOARD
@@ -89,6 +89,7 @@ Stepper myStepperZ(18,16,17,19,0);
 #define GP2_PIN     5   //General pupose (coolant 2) output
 #define GP3_PIN     3   //General pupose
 #define SERVO_PIN  12   //Servo output
+#define ENDSW_PIN  A0   //Start/End Switch input
 #endif
 
 #ifdef V1_BOARD
@@ -102,6 +103,7 @@ Stepper myStepperZ(18,19,17,16,0);
 #define GP2_PIN     3   //General pupose (coolant 2) output
 #define GP3_PIN    -1   //General pupose
 #define SERVO_PIN  12   //Servo output
+#define ENDSW_PIN  A0   //Start/End Switch input
 #endif
 
 #ifdef GRBL_BOARD
@@ -111,10 +113,12 @@ Stepper myStepperZ(7,4,8);
 
 /* General purpose outputs */
 #define LED_PIN    12   //LED/LASER output
+#define DIR_PIN    13   //LED/LASER output
 #define GP1_PIN    A3   //General pupose (coolant 1) output
 #define GP2_PIN    A4   //General pupose (coolant 2) output
-#define GP3_PIN    13   //General pupose
+#define GP3_PIN    A2   //General pupose
 #define SERVO_PIN  A5   //Servo output
+#define ENDSW_PIN  A0   //Start/End Switch input
 #endif
 
 /* Servo functions and limits */

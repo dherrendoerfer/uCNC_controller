@@ -132,9 +132,12 @@ void process_command(uint8_t *command_string)
 
     switch(code) {
     case 3:
-    case 4:
       if (command_exists('S')) spindleSpeed = (int)getValue('S');
       spindle=1;
+      break;
+    case 4:
+      if (command_exists('S')) spindleSpeed = (int)getValue('S');
+      spindle=2;
       break;
     case 5:
       spindle=0;
