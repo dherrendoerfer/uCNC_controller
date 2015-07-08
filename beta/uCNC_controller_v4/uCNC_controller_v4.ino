@@ -25,7 +25,7 @@ float uCNC_Version = 1.99;
 
 /* Version of the controller board in use.*/
 //#define V1_BOARD 1
-#define V4_BOARD 1
+#define GRBL_BOARD 1
 
 /* Development functions - broken code */
 //#define BUILTIN 1
@@ -50,22 +50,22 @@ float uCNC_Version = 1.99;
    The RampMax value is added on top of the step
    freqency, which is the start step rate in HZ.
    The ramp rise is set with the Ramp value */
-float stepsPerMillimeter_X = -80;
-int   stepIssueFrequency_X  = 800;
+float stepsPerMillimeter_X = 80;
+int   stepIssueFrequency_X  = 400;
 int   stepIssueFreqRamp_X = 10;
-int   stepIssueFrequencyRampMax_X  = 2000;
+int   stepIssueFrequencyRampMax_X  = 200;
 int   stepDriveSlack_X = 0;
 
 float stepsPerMillimeter_Y = 80;
-int   stepIssueFrequency_Y  = 800;
+int   stepIssueFrequency_Y  = 400;
 int   stepIssueFreqRamp_Y = 10;
-int   stepIssueFrequencyRampMax_Y  = 2000;
+int   stepIssueFrequencyRampMax_Y  = 200;
 int   stepDriveSlack_Y = 0;
 
-float stepsPerMillimeter_Z = 300;
+float stepsPerMillimeter_Z = 100;
 int   stepIssueFrequency_Z  = 400;
 int   stepIssueFreqRamp_Z = 5;
-int   stepIssueFrequencyRampMax_Z  = 600;
+int   stepIssueFrequencyRampMax_Z  = 100;
 int   stepDriveSlack_Z = 0;
 
 /* Unit conversion factor */
@@ -130,7 +130,11 @@ int servoToolInc=10;
 float servoPosZfactor=1.0;
 
 /* Mode selector for the motors (see documentation) */
-int   motorMode = 0;
+int   motorMode = 1;
+
+/* Important value for laser and servo mode defines the height
+   at which the laser is turned on */
+#define Z_TRIP_VAL 0.0001
 
 /* X,Y,Z in absolute steps position */
 posval_t X = 0;

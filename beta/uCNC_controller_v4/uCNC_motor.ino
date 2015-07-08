@@ -1,4 +1,3 @@
-
 /*
  * This file is part of uCNC_controller.
  *
@@ -65,6 +64,8 @@
 #define DRILL_SPEED 0.1
 #define DRILL_DEPTH 10 //mm
 
+int posServo;
+
 void initMotors()
 {
   /*Set stepper base speed */
@@ -79,6 +80,7 @@ void initMotors()
 
   myServo.attach(SERVO_PIN);
   myServo.write(servoPosMax);
+  posServo = servoPosMax;
 }
 
 void homeXYZ()
@@ -173,6 +175,7 @@ void resetXYZ()
   X = 0;
   Z = 0;
 }
+
 void updateServo(int servoPos)
 {
   if (servoPos>servoPosMax)
@@ -181,6 +184,7 @@ void updateServo(int servoPos)
     servoPos = servoPosMin;
   
   myServo.write(servoPos);
+  posServo = servoPos;
 }
 
 void servoZ()
@@ -198,9 +202,11 @@ int moveZ(posval_t dZ, char *px, char *py, char *pz)
     *pz += tristate(dZ);
     break;
   case 1:
-    digitalWrite(LED_PIN,(Z < 0) ? HIGH : LOW);
-    if ( (Z == -1 && dZ == -1) || (Z == 0 && dZ == 1)) {
-      updateServo((Z < 0) ? servoPosMin : servoPosMax);
+    int pServo;
+    pServo = (Z < Z_TRIP_VAL) ? servoPosMin : servoPosMax;
+    digitalWrite(LED_PIN,(Z < Z_TRIP_VAL) ? HIGH : LOW);
+    if ( pServo != posServo ) {
+      updateServo(pServo);
       delay(100);
     }
     return 0;
