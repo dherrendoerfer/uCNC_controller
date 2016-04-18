@@ -258,7 +258,7 @@ void updateToolCodes()
 
 /* No direct IO below this line */
 
-void _moveToXYZ(int pX, int pY, int pZ, int accelX, int accelY, int accelZ)
+void _moveToXYZ(posval_t pX, posval_t pY, posval_t pZ, int accelX, int accelY, int accelZ)
 { 
   int fx,fy,fz;
   char px,py,pz;   // The frequencies for each stepper
