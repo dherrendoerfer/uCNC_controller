@@ -1,7 +1,7 @@
  *
  * This file is part of uCNC_controller.
  *
- * Copyright (C) 2014  D.Herrendoerfer
+ * Copyright (C) 2014,2015,2016  D.Herrendoerfer
  *
  *   uCNC_controller is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,10 +27,10 @@ uCNC_controller Readme file:
 
 uCNC_controller is a g-code interpreting controller app that is intended
 for use on the Arduino platform. It interprets a number of g-code 
-commands and controls a number of unipolar stepper motors (3), some 
+commands and controls a number of stepper motors (3), some 
 digital outputs (2), and number of servos (1) accordingly.
 It is intended for use in home or educational projects, and as the 
-license states: it comes with no waranty whatsoever. If you use it
+license states: it comes with no warranty whatsoever. If you use it
 and it breaks in your hands, you get to keep all the pieces.
 
 
@@ -50,12 +50,25 @@ Default configuration:
   Servo out:  12
   Unused   :  A0,A1,A6,A7 (A6 and A7 cannot be used as output) 
 
+Note, that the controller now supports more than one connection
+  scheme, as there are several boards available that can drive
+  the steppers and ports. For example the GRBL shield is supported
+  natively. Work is in progress to support the RAMPS v1.4 shields
+  as well.
+
 System Reset and Initialization routine
 ---------------------------------------
-  Upon reset or power up the controller attempts to move all
-  axis into their minimal position by traversing the configured
-  distance into a solid zero position block - builds should be
-  designed to cope with this. 
+  Options are:
+  1. Upon reset or power up the controller attempts to move all
+     axis into their minimal position by traversing the configured
+     distance into a solid zero position block - builds should be
+     designed to cope with this.
+  2. Reset to zero switch, whereas a single input may be used for
+     all reset switches. During homing the firmware first tries to
+     clear the home condition by moving the axis away from the 
+     switch.
+  3. Do nothing, and let the operator zero to the appropriate 
+     position 
 
 Device-specific values and devices
 ==================================
@@ -71,7 +84,7 @@ Control ports:
 Device-specific G-Code commands:
 ================================
   NOTE: All of these settings can be made in the source code of the
-        controller applivation, and should in fact be made there.
+        controller application, and should in fact be made there.
         The possibility to change them is intended to make it possible
         to create a controller module that can be shared between 
         several installations, and that is configured by the init

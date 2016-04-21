@@ -1,0 +1,42 @@
+Copyright (C) 2014,2015,2016 D.Herrendoerfer 
+
+This directoy contains additional files for uCNC_controller
+
+Controller
+----------
+  The this directory contains the files to recreate a controller
+  PCB using uCNC_controller and a G-Code sender.
+
+Controller_v1
+-------------
+  The this directory contains the files for an updated version
+  of the first control board. It also includes the original
+  Eagle project files.
+
+Controller_v4
+-------------
+  The this directory contains the files for an upgraded version
+  of the control board. It uses A4988 stepper driver modules that
+  allow the use of bipolar steppers. It also includes the original
+  Eagle project files.
+
+GcodeWriter
+-----------
+  This directory contains an updated version of ardGcodeWriter.py
+  with a number of improvements from me.
+  This was not developed by me, I only fixed a number of bugs in
+  the program. As the original has been removed from the net I
+  keep my latest version here for reference.
+  For more information on the original Author, refer to the source
+  code.
+  
+Hp2xx
+-----
+  This directory contains a Windows executable of the hp2xx tool.
+  This is for reference only, but as the tool appears to be unmaintained
+  at this time I keep it here. 
+
+Plotter_v3
+----------
+  This directory contains the files to recreate a simple plotter that
+  can be used with the uCNC_controller firmware.
