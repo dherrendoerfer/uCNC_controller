@@ -3,12 +3,15 @@ Sample stl model files to make a plotter using a 3D printer.
 Other needed parts list:
 
 The 3D parts in this directory ( Plotter-v3-PenMount-2.stl twice)
+or the Plotter-v3-AllParts.stl once, it contains everything except the
+table, which is optional and can easily be replaced by some prototyping
+board.
 
 Other parts required:
 
 Quan.|  Item
 -----+----------------------------------------------
-4	  	5mm steel rod.
+4	  	5mm steel rod. 
 		Brass tube, 6mm outer, 5mm inner diameter
 2 		Stepper Motors 28YBJ-48 (12V or 5V)
 2 		Ball bearings 4/2mm
@@ -25,9 +28,10 @@ Quan.|  Item
 1 		Arduino nano with 328P 
 2		ULN2003 or ULN2004
 1		7805 Power regulator
-1		Capacitor 1000uF/25V
-1		Capacitor 100uF/10V
-		Male Connectors for Motors and
+1		Capacitor 1000uF/25V (input smoothing)
+1		Capacitor 100uF/10V  (5V smoothing)
+		Male Connectors for Motors and Arduino
+		Female pin connectors for Servo and Laser out.
 Optional
 		Mosfet and Resistor for Laser driver
 		(Choose what you need, depends on laser type)
