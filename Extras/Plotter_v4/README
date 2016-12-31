@@ -1,0 +1,38 @@
+Sample stl model files to make a plotter using a 3D printer.
+
+Other needed parts list:
+
+The 3D parts in this directory (Plotter-v4-AllParts.stl) once, 
+and the parts for the pen-holder from the Plotter_v3 directory.
+
+
+Other parts required:
+
+Quan.|  Item
+-----+----------------------------------------------
+4	  	5mm steel rod. 
+		Brass tube, 6mm outer, 5mm inner diameter
+2 		NEMA 17 Stepper Motors
+2		T2 or T2.5 belt 6mm width
+2		T2 or T2.5 belt pulleys
+2 		Ball bearings 11/5mm
+1 		20mm micro servo
+8		Magnets (5/1mm)
+		Nylon string or fishing line
+		Some PCB prototyping board
+	
+	
+Parts list for the controller:
+
+Quan.|  Item
+-----+----------------------------------------------
+1 		Arduino nano with 328P 
+2		Polulu Stepper driver modules
+1		7805 Power regulator
+1		Capacitor 1000uF/25V (input smoothing)
+1		Capacitor 100uF/10V  (5V smoothing)
+		Male Connectors for Motors and Arduino
+		Female pin connectors for Servo and Laser out.
+Optional
+		Mosfet and Resistor for Laser driver
+		(Choose what you need, depends on laser type)
