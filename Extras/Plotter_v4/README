@@ -11,15 +11,15 @@ Other parts required:
 Quan.|  Item
 -----+----------------------------------------------
 4	  	5mm steel rod. 
-		Brass tube, 6mm outer, 5mm inner diameter
+some	Brass tube, 6mm outer, 5mm inner diameter
 2 		NEMA 17 Stepper Motors
 2		T2 or T2.5 belt 6mm width
 2		T2 or T2.5 belt pulleys
 2 		Ball bearings 11/5mm
 1 		20mm micro servo
 8		Magnets (5/1mm)
-		Nylon string or fishing line
-		Some PCB prototyping board
+some	Nylon string or fishing line
+some 	PCB prototyping board
 	
 	
 Parts list for the controller:
