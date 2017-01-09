@@ -7,18 +7,23 @@ or the Plotter-v3-AllParts.stl once, it contains everything except the
 table, which is optional and can easily be replaced by some prototyping
 board.
 
+Please note that the maximum size of this plotter can be quite large,
+but to minimize the elastic effect of the nylon string I advise to keep
+the X axis at about 20cm and the Y Axis at 16cm. The steel rods need to
+be 2cm larger for the X axis (24cm) and 6cm for the Y Axis (24cm).
+
 Other parts required:
 
 Quan.|  Item
 -----+----------------------------------------------
 4	  	5mm steel rod. 
-		Brass tube, 6mm outer, 5mm inner diameter
+some	Brass tube, 6mm outer, 5mm inner diameter
 2 		Stepper Motors 28YBJ-48 (12V or 5V)
 2 		Ball bearings 4/2mm
 1 		20mm micro servo
 8		Magnets (5/1mm)
-		Nylon string or fishing line
-		Some PCB
+some	Nylon string or fishing line
+some	PCB prototyping board
 	
 	
 Parts list for the controller:
