@@ -24,8 +24,8 @@
 float uCNC_Version = 1.99;
 
 /* Version of the controller board in use.*/
-//#define V1_BOARD 1
-#define GRBL_BOARD 1
+#define V1_BOARD 1
+//#define GRBL_BOARD 1
 
 /* Development functions - broken code */
 //#define BUILTIN 1
@@ -62,10 +62,10 @@ int   stepIssueFreqRamp_Y = 10;
 int   stepIssueFrequencyRampMax_Y  = 200;
 int   stepDriveSlack_Y = 0;
 
-float stepsPerMillimeter_Z = 100;
-int   stepIssueFrequency_Z  = 400;
-int   stepIssueFreqRamp_Z = 5;
-int   stepIssueFrequencyRampMax_Z  = 100;
+float stepsPerMillimeter_Z = 80;
+int   stepIssueFrequency_Z  = 100;
+int   stepIssueFreqRamp_Z = 0;
+int   stepIssueFrequencyRampMax_Z  = 0;
 int   stepDriveSlack_Z = 0;
 
 /* Unit conversion factor */

@@ -72,14 +72,16 @@ void initMotors()
   myStepperX.setSpeed(stepIssueFrequency_X);
   myStepperY.setSpeed(stepIssueFrequency_Y);
   myStepperZ.setSpeed(stepIssueFrequency_Z);
-  
+
   /*Set steppers slack (if any)*/
   myStepperX.setSlack(stepDriveSlack_X);
   myStepperY.setSlack(stepDriveSlack_Y);
   myStepperZ.setSlack(stepDriveSlack_Z);
 
   myServo.attach(SERVO_PIN);
+  delay(20); /* Wait for step irq loop init */
   myServo.write(servoPosMax);
+  
   posServo = servoPosMax;
 }
 
