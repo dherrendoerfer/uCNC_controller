@@ -82,6 +82,7 @@ uint8_t asleep = 0;
 
 void setup() {
   Serial.begin(9600);
+  Serial.println("uCNC_controller (compatible: Grbl v0.81, Repetier 0.80, E3D v1.00)");
   
   // LED (Laser output)
   pinMode(led, OUTPUT);
@@ -103,7 +104,6 @@ void clear_command_string() {
 void loop() {
   uint8_t c;
   
-  Serial.println("uCNC_controller (compatible: Grbl v0.81, Repetier 0.80, E3D v1.00)");
   Serial.println("ready");
 
   while (true) {
