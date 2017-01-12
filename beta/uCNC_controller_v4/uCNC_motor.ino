@@ -97,47 +97,32 @@ void homeXYZ()
   if (have_endswitch) {
     /* if the end-switch is on go forward a bit */
     if (analogRead(ENDSW_PIN) > 200)
-      moveX(100*sgn(stepsPerMillimeter_X)); 
+      myStepperX.home(ENDSW_PIN, 0, 100, sgn(stepsPerMillimeter_X), stepIssueFrequency_X/8);
     if (analogRead(ENDSW_PIN) > 200)
-      moveY(100*sgn(stepsPerMillimeter_Y)); 
+      myStepperY.home(ENDSW_PIN, 0, 100, sgn(stepsPerMillimeter_Y), stepIssueFrequency_Y/8);
     if (motorMode==0 && analogRead(ENDSW_PIN) > 200)
-      moveZ(100*sgn(stepsPerMillimeter_Z)); 
+      myStepperZ.home(ENDSW_PIN, 0, 100, sgn(stepsPerMillimeter_Z), stepIssueFrequency_Z/8);
     
     if (analogRead(ENDSW_PIN) > 200) // fail, switch is still on
       return;    
+
+    myStepperX.home(ENDSW_PIN, 2000, 20, sgn(stepsPerMillimeter_X), stepIssueFrequency_X/4);
+    myStepperY.home(ENDSW_PIN, 2000, 20, sgn(stepsPerMillimeter_Y), stepIssueFrequency_Y/4);
     
-    while(i++<2000 && analogRead(ENDSW_PIN) < 200)
-      moveX(-1*sgn(stepsPerMillimeter_X));
-    i=0;
-    while(i++<20 && analogRead(ENDSW_PIN) > 200)
-      moveX(1*sgn(stepsPerMillimeter_X));
-
-    i=0;
-    while(i++<2000 && analogRead(ENDSW_PIN) < 200)
-      moveY(-1*sgn(stepsPerMillimeter_Y));
-    i=0;
-    while(i++<20 && analogRead(ENDSW_PIN) > 200)
-      moveY(1*sgn(stepsPerMillimeter_Y));
-
     if (motorMode == 0) {
-      i=0;
-      while(i++<2000 && analogRead(ENDSW_PIN) < 200)
-        moveZ(-1*sgn(stepsPerMillimeter_Z));
-      i=0;
-      while(i++<20 && analogRead(ENDSW_PIN) > 200)
-        moveZ(1*sgn(stepsPerMillimeter_Z));
+      myStepperZ.home(ENDSW_PIN, 2000, 20, sgn(stepsPerMillimeter_Z), stepIssueFrequency_Z/4);
     }
     
   } else {
-    myStepper1.step(RESET_TRAVEL_X);
-    myStepper2.step(RESET_TRAVEL_Y);
+    myStepperX.step(RESET_TRAVEL_X, stepIssueFrequency_X/4);
+    myStepperY.step(RESET_TRAVEL_Y, stepIssueFrequency_Y/4);
     if (motorMode == 0) {
-      myStepper3.step(RESET_TRAVEL_Z);
+      myStepperZ.step(RESET_TRAVEL_Z, stepIssueFrequency_Z/4);
       delay(500);
-      myStepper3.step(RESET_PRELOAD_Z);
+      myStepperZ.step(RESET_PRELOAD_Z, stepIssueFrequency_Z/4);
     }
-    myStepper2.step(RESET_PRELOAD_Y);
-    myStepper1.step(RESET_PRELOAD_X);
+    myStepperY.step(RESET_PRELOAD_Y, stepIssueFrequency_Y/4);
+    myStepperX.step(RESET_PRELOAD_X, stepIssueFrequency_X/4);
   }
 #endif  
   resetPosXYZ();

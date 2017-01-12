@@ -336,3 +336,28 @@ void Stepper::powerdown()
 #endif
 }
 
+void Stepper::home(unsigned int switch_input, unsigned long home_steps, unsigned long out_steps, int direction, unsigned int speed)
+{
+  unsigned long i=0;
+  /* Move into the switch */
+
+  while(i++<home_steps && analogRead(switch_input) < 200) {
+    chk(speed,0);
+    update(-1*direction);
+  }
+  i=0;
+  while(i++<out_steps && analogRead(switch_input) > 200){
+    chk(speed,0);
+    update(direction);
+  }
+}
+
+void Stepper::step(unsigned long steps, unsigned int speed)
+{
+  unsigned long i=0;
+
+  while(i++<steps) {
+    chk(speed,0);
+    update(sgn(steps));
+  }
+}

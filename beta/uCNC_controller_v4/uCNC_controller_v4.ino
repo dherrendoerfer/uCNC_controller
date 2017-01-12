@@ -25,6 +25,7 @@ float uCNC_Version = 1.99;
 
 /* Version of the controller board in use.*/
 #define V1_BOARD 1
+//#define V4_BOARD 1
 //#define GRBL_BOARD 1
 
 /* Development functions - broken code */
@@ -42,7 +43,7 @@ float uCNC_Version = 1.99;
 /* Define this if you want the machine to perform
    a reset during startup, else, the first set_home
    or go_home will initialize it.*/
-//#define DO_RESET 1
+#define DO_RESET 1
 
 /* Conversion factor of steps per millimeter 
    use the slack/backlash variable, if you have
