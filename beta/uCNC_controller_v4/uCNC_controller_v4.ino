@@ -43,7 +43,7 @@ float uCNC_Version = 1.99;
 /* Define this if you want the machine to perform
    a reset during startup, else, the first set_home
    or go_home will initialize it.*/
-#define DO_RESET 1
+//#define DO_RESET 1
 
 /* Conversion factor of steps per millimeter 
    use the slack/backlash variable, if you have
@@ -119,7 +119,7 @@ Stepper myStepperZ(7,4,8);
 #define GP2_PIN    A4   //General pupose (coolant 2) output
 #define GP3_PIN    A2   //General pupose
 #define SERVO_PIN  A5   //Servo output
-#define ENDSW_PIN  A0   //Start/End Switch input
+#define ENDSW_PIN  A6   //Start/End Switch input
 #endif
 
 /* Servo functions and limits */
@@ -184,6 +184,8 @@ void setup() {
   pinMode(GP1_PIN, OUTPUT);
   pinMode(GP2_PIN, OUTPUT);
   pinMode(GP3_PIN, OUTPUT);
+
+  pinMode(ENDSW_PIN, INPUT_PULLUP);
   
   /* Init the steppers and servo */
   initMotors();

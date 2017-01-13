@@ -345,6 +345,9 @@ void Stepper::home(unsigned int switch_input, unsigned long home_steps, unsigned
     chk(speed,0);
     update(-1*direction);
   }
+  
+  delay(500);
+  
   i=0;
   while(i++<out_steps && analogRead(switch_input) > 200){
     chk(speed,0);
