@@ -110,7 +110,8 @@ void homeXYZ()
     myStepperY.home(ENDSW_PIN, 2000, 20, sgn(stepsPerMillimeter_Y), stepIssueFrequency_Y/4);
     
     if (motorMode == 0) {
-      myStepperZ.home(ENDSW_PIN, 2000, 20, sgn(stepsPerMillimeter_Z), stepIssueFrequency_Z/4);
+      if (have_endswitchZ)
+        myStepperZ.home(ENDSW_PIN, 2000, 20, sgn(stepsPerMillimeter_Z), stepIssueFrequency_Z/4);
     }
     
   } else {
@@ -187,6 +188,9 @@ int moveZ(posval_t dZ, char *px, char *py, char *pz)
   switch(motorMode) {
   case 0:
     *pz += tristate(dZ);
+#ifdef Z_LASERLED_IN_MODE_0
+    digitalWrite(LED_PIN,(Z < Z_TRIP_VAL) ? HIGH : LOW);
+#endif
     break;
   case 1:
     int pServo;

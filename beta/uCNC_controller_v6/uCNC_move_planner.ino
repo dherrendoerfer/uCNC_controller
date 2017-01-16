@@ -1,7 +1,7 @@
 /*
  * This file is part of uCNC_controller.
  *
- * Copyright (C) 2016  D.Herrendoerfer
+ * Copyright (C) 2016,2017  D.Herrendoerfer
  *
  *   uCNC_controller is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*
  * This file is part of uCNC_controller.
  *
- * Copyright (C) 2016  D.Herrendoerfer
+ * Copyright (C) 2016,2017  D.Herrendoerfer
  *
  *   uCNC_controller is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -40,85 +40,21 @@ void homeXYZ()
   int i=0;
   
   if(pos_known) {
-    movePosXYZ (0, 0, 0, 0);
+//    movePosXYZ (0, 0, 0, 0);
     return;
   }
 #ifdef DO_RESET  
   if (have_endswitch) {
-    /* if the end-switch is on go forward a bit */
-    if (analogRead(ENDSW_PIN) > 200)
-      moveX(100*sgn(stepsPerMillimeter_X)); 
-    if (analogRead(ENDSW_PIN) > 200)
-      moveY(100*sgn(stepsPerMillimeter_Y)); 
-    if (motorMode==0 && analogRead(ENDSW_PIN) > 200)
-      moveZ(100*sgn(stepsPerMillimeter_Z)); 
-    
-    if (analogRead(ENDSW_PIN) > 200) // fail, switch is still on
-      return;    
-    
-    while(i++<2000 && analogRead(ENDSW_PIN) < 200)
-      moveX(-1*sgn(stepsPerMillimeter_X));
-    i=0;
-    while(i++<20 && analogRead(ENDSW_PIN) > 200)
-      moveX(1*sgn(stepsPerMillimeter_X));
 
-    i=0;
-    while(i++<2000 && analogRead(ENDSW_PIN) < 200)
-      moveY(-1*sgn(stepsPerMillimeter_Y));
-    i=0;
-    while(i++<20 && analogRead(ENDSW_PIN) > 200)
-      moveY(1*sgn(stepsPerMillimeter_Y));
-
-    if (motorMode == 0) {
-      i=0;
-      while(i++<2000 && analogRead(ENDSW_PIN) < 200)
-        moveZ(-1*sgn(stepsPerMillimeter_Z));
-      i=0;
-      while(i++<20 && analogRead(ENDSW_PIN) > 200)
-        moveZ(1*sgn(stepsPerMillimeter_Z));
-    }
+    // todo
     
   } else {
-    myStepper1.step(RESET_TRAVEL_X);
-    myStepper2.step(RESET_TRAVEL_Y);
-    if (motorMode == 0) {
-      myStepper3.step(RESET_TRAVEL_Z);
-      delay(500);
-      myStepper3.step(RESET_PRELOAD_Z);
-    }
-    myStepper2.step(RESET_PRELOAD_Y);
-    myStepper1.step(RESET_PRELOAD_X);
+
+    // todo
+    
   }
 #endif  
   resetPosXYZ();
-}
-
-int moveX(posval_t dX, char *px, char *py, char *pz)
-{
-  int i;
-  X = X + dX;
-
-  *px += tristate(dX);
-//  *py += tristate(dX); // My Plotter (needs COMPLEX_MOVE defined)
-  return stepIssueFrequency_X;
-}
-
-int moveY(posval_t dY, char *px, char *py, char *pz)
-{
-  Y = Y + dY;
-  
-  switch(motorMode) {
-  case 0:
-    *py += tristate(dY);
-    break;
-  case 1:
-  case 2:
-  case 3:
-    *py += tristate(dY);  // Stepper 2 and 3 are Y
-    *pz += tristate(dY);
-    break;
-  }  
-  return (stepIssueFrequency_Y);
 }
 
 void resetXYZ()
@@ -149,29 +85,6 @@ int moveZ(posval_t dZ, char *px, char *py, char *pz)
 {
   Z = Z + dZ;  
 
-  switch(motorMode) {
-  case 0:
-    *pz += tristate(dZ);
-    break;
-  case 1:
-    int pServo;
-    pServo = (Z < Z_TRIP_VAL) ? servoPosMin : servoPosMax;
-    digitalWrite(LED_PIN,(Z < Z_TRIP_VAL) ? HIGH : LOW);
-    if ( pServo != posServo ) {
-      updateServo(pServo);
-      delay(100);
-    }
-    return 0;
-    break;
-  case 2:
-    updateServo(servoPosMin + (servoPosZfactor*posZ));
-    delay(10);
-    break;
-  case 3:
-    digitalWrite(LED_PIN,(posZ > 0) ? HIGH : LOW);
-    break;
-  }
-  return (stepIssueFrequency_Z);
 }
 
 void powerdown()
@@ -212,118 +125,12 @@ void updateToolCodes()
 
 void _moveToXYZ(posval_t pX, posval_t pY, posval_t pZ, int accelX, int accelY, int accelZ)
 { 
-  int fx,fy,fz;
-  char px,py,pz;   // The frequencies for each stepper
-
-  fx=0; //motor frequencies
-  fy=0;
-  fz=0;
-
-  px=0; //position increments
-  py=0;
-  pz=0;
-
-  if (pX - X)
-    fx = moveX(pX - X, &px, &py, &pz);
-  if (pY - Y)
-    fy = moveY(pY - Y, &px, &py, &pz);
-  if (pZ - Z)
-    fz = moveZ(pZ - Z, &px, &py, &pz);
-
-  /* in theory px,py,pz should never be larger than
-   * 2 or smaller than -2. Therefore there should never
-   * be more than 2 move schedules here. */
-  
-  if (fx) {
-    myStepperX.chk(fx+accelX,0);
-  }
-  if (fy) {
-    myStepperY.chk(fy+accelY,0);
-  }
-  if (fz) {
-    myStepperZ.chk(fz+accelZ,0);
-  }
-
-  if (px) {
-    myStepperX.update(tristate(px));
-  }
-  if (py) {
-    myStepperY.update(tristate(py));
-  }
-  if (pz) {
-    myStepperZ.update(tristate(pz));
-  } 
-
-#ifdef COMPLEX_MOVE
-  if (abs(px)==2) {
-    myStepperX.chk(fx+accelX);
-    myStepperX.update(tristate(px));
-  }
-  if (abs(py)==2) {
-    myStepperY.chk(fy+accelY);
-    myStepperY.update(tristate(py));
-  }
-  if (abs(pz)==2) {
-    myStepperZ.chk(fz+accelZ);
-    myStepperZ.update(tristate(pz));
-  }
-#endif
 }
 
-int accelerate( posval_t pos,posval_t distance, int acceleration, int limit )
-{
-  unsigned long accval;
-  
-  if ( pos < 100 ) {
-    // accelerate 
-    accval = pos * acceleration;
-    if (accval < limit)
-      return (int)accval;
-  }
-  if (pos > (distance - 100)) {
-    // brake
-    accval = (distance-pos) * acceleration;
-    if (accval < limit)
-      return (int)accval;
-  }
-  
-  return limit;
-}
 
 void moveToXYZ(posval_t pX, posval_t pY, posval_t pZ, int accelX, int accelY, int accelZ)
 { 
-  posval_t dX = pX - X;
-  posval_t dY = pY - Y;
-  posval_t dZ = pZ - Z;
-  
-  posval_t absX = abs(dX);
-  posval_t absY = abs(dY);
-  posval_t absZ = abs(dZ);
-  
-  posval_t deltaX = absX;
-  posval_t deltaY = absY;
-  posval_t deltaZ = absZ;
 
-  int mX = tristate(dX);
-  int mY = tristate(dY);
-  int mZ = tristate(dZ);
-
-  while (absX || absY || absZ)
-  {
-    if (absX) {
-      absX--;
-      accelX=accelerate(deltaX-absX, deltaX, stepIssueFreqRamp_X, stepIssueFrequencyRampMax_X);
-    }
-    if (absY) {
-      absY--;
-      accelY=accelerate(deltaY-absY, deltaY, stepIssueFreqRamp_Y, stepIssueFrequencyRampMax_Y);
-    }
-    if (absZ) {
-      absZ--;
-      accelZ=accelerate(deltaZ-absZ, deltaZ, stepIssueFreqRamp_Z, stepIssueFrequencyRampMax_Z);
-    }
-    _moveToXYZ(X + mX, Y + mY, Z + mZ, accelX, accelY, accelZ);
-  }
 }
 /*
 void moveToX(int pX)
@@ -372,121 +179,6 @@ void wait(unsigned long steptime)
   return;
 }
 
-void lineXYZ(posval_t x2, posval_t y2, posval_t z2, float feedrate)
-{
-  posval_t n, deltax, deltay, deltaz, sgndeltax, sgndeltay, sgndeltaz, deltaxabs, deltayabs, deltazabs, x, y, z, drawx, drawy, drawz;
-
-  deltax = x2 - X;
-  deltay = y2 - Y;
-  deltaz = z2 - Z;
-  deltaxabs = abs(deltax);
-  deltayabs = abs(deltay);
-  deltazabs = abs(deltaz);
-  sgndeltax = sgn(deltax);
-  sgndeltay = sgn(deltay);
-  sgndeltaz = sgn(deltaz);
-  x = deltaxabs >> 1;
-  y = deltayabs >> 1;
-  z = deltazabs >> 1;
-  drawx = X;
-  drawy = Y;
-  drawz = Z;
-  
-  int accel=0;
-  
-  unsigned long stepdelay = 0;
-  unsigned long laststep = 0;
-  
-  int delay_X=60000000/(fabs(stepsPerMillimeter_X) * feedrate);
-  int delay_Y=60000000/(fabs(stepsPerMillimeter_Y) * feedrate);
-  int delay_Z=60000000/(fabs(stepsPerMillimeter_Z) * feedrate);
-    
-  moveToXYZ(drawx, drawy, drawz, 0, 0, 0);
-  laststep=micros();
-  
-  // dX is biggest
-  if(deltaxabs >= deltayabs && deltaxabs >= deltazabs){
-    for(n = 0; n < deltaxabs; n++){
-      stepdelay = delay_X;
-
-      y += deltayabs;
-      if(y >= deltaxabs){
-        y -= deltaxabs;
-        drawy += sgndeltay;
-        stepdelay += delay_Y;
-      }
-      z += deltazabs;
-      if(z >= deltaxabs){
-        z -= deltaxabs;
-        drawz += sgndeltaz;
-        stepdelay += delay_Z;
-      }
-
-      drawx += sgndeltax;
-      
-      accel = accelerate(n,deltaxabs, stepIssueFreqRamp_X, stepIssueFrequencyRampMax_X);
-
-      wait(laststep+stepdelay);
-      laststep=micros();
-      _moveToXYZ(drawx, drawy, drawz, accel, (deltaxabs == deltayabs ? accel : 0), 0);
-    }
-    return;
-  }
-  // dY is biggest
-  if(deltayabs >= deltaxabs && deltayabs >= deltazabs){
-    for(n = 0; n < deltayabs; n++){
-      stepdelay = delay_Y;
-
-      x += deltaxabs;
-      if(x >= deltayabs){
-        x -= deltayabs;
-        drawx += sgndeltax;
-        stepdelay += delay_X;
-      }
-      z += deltazabs;
-      if(z >= deltayabs){
-        z -= deltayabs;
-        drawz += sgndeltaz;
-        stepdelay += delay_Z;
-      }
-      drawy += sgndeltay;
-
-      accel = accelerate(n,deltayabs, stepIssueFreqRamp_Y, stepIssueFrequencyRampMax_Y);
-
-      wait(laststep+stepdelay);
-      laststep=micros();
-      _moveToXYZ(drawx, drawy, drawz, 0, accel, 0);
-    }
-    return;
-  }
-  // dZ is biggest
-  if(deltazabs >= deltaxabs && deltazabs >= deltayabs){
-    for(n = 0; n < deltazabs; n++){
-      stepdelay = delay_Z;
-
-      x += deltaxabs;
-      if(x >= deltazabs){
-        x -= deltazabs;
-        drawx += sgndeltax;
-        stepdelay += delay_X;
-      }
-      y += deltayabs;
-      if(y >= deltazabs){
-        y -= deltazabs;
-        drawy += sgndeltay;
-        stepdelay += delay_Y;
-      }
-      drawz += sgndeltaz;
-
-      accel = accelerate(n,deltazabs, stepIssueFreqRamp_Z, stepIssueFrequencyRampMax_Z);
-
-      wait(laststep+stepdelay);
-      laststep=micros();
-      _moveToXYZ(drawx, drawy, drawz, 0, 0, accel);
-    }
-    return;
-  }
-}
 
 /* No direct use of step coordinates below this line */
 

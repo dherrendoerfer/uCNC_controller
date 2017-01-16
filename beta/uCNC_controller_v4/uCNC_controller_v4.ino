@@ -137,6 +137,9 @@ int   motorMode = 1;
    at which the laser is turned on */
 #define Z_TRIP_VAL 0.0001
 
+/* Laser LED on in mode 0 */
+//#define Z_LASERLED_IN_MODE_0 1 
+
 /* X,Y,Z in absolute steps position */
 posval_t X = 0;
 posval_t Y = 0;
@@ -145,8 +148,13 @@ posval_t Z = 0;
 /* Set to false to have the first G28(home) reset the axis */
 boolean pos_known = false;
 
-/* Set to true if there is are end-switches on A0 */
-boolean have_endswitch = false;
+/* Set to true if there are end-switches on the CNC */
+boolean have_endswitch  = false;
+/* Special case for having an endswitch on Z*/
+boolean have_endswitchZ = false;
+
+/* Set the analog level for the enswitch to see the grounded level*/
+#define ENDSWITCH_ON_LEVEL 16
 
 /* For non-endswitch reset */
 #define RESET_TRAVEL_X -1500
@@ -185,8 +193,10 @@ void setup() {
   pinMode(GP2_PIN, OUTPUT);
   pinMode(GP3_PIN, OUTPUT);
 
+#ifdef ENDSW_PIN
   pinMode(ENDSW_PIN, INPUT_PULLUP);
-  
+#endif
+
   /* Init the steppers and servo */
   initMotors();
 }

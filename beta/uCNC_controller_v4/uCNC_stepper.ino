@@ -341,7 +341,7 @@ void Stepper::home(unsigned int switch_input, unsigned long home_steps, unsigned
   unsigned long i=0;
   /* Move into the switch */
 
-  while(i++<home_steps && analogRead(switch_input) < 200) {
+  while(i++<home_steps && analogRead(switch_input) < ENDSWITCH_ON_LEVEL) {
     chk(speed,0);
     update(-1*direction);
   }
@@ -349,7 +349,7 @@ void Stepper::home(unsigned int switch_input, unsigned long home_steps, unsigned
   delay(500);
   
   i=0;
-  while(i++<out_steps && analogRead(switch_input) > 200){
+  while(i++<out_steps && analogRead(switch_input) > ENDSWITCH_ON_LEVEL) {
     chk(speed,0);
     update(direction);
   }
