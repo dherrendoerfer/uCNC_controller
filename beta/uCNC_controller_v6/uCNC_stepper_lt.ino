@@ -15,20 +15,18 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with uCNC_controller.  If not, see <http://www.gnu.org/licenses/>.
- *
- *   This is a new move-based implementation, 
  */
 
-/* Developer note:
- * This file contains the drivers for 3 types of stepper controllers.
- * By choosing the appropriate constructor you choose the driver.
- * Available are:
- * 
- * 2Pin: Bipolar driver for double-h bar driver chips
- * 3pin: Bipolar driver for A4988 or similar chips with direction and step 
- *       interface and enable
- * 4pin: Unipolar stepper driver for use with ULN2003/2004 driver ICs
- */
+/* README:
+This file contains the drivers for 3 types of stepper controllers.
+By choosing the appropriate constructor you choose the driver.
+Available are:
+
+2Pin: Bipolar driver for double-h bar driver chips
+3pin: Bipolad driver for A4988 or similar chips with direction and step 
+      interface and enable
+4pin: Unipolar stepper driver for use with ULN2003/2004 driver ICs
+*/
 
 #ifdef STEPPER_2PIN
 /*
@@ -37,11 +35,10 @@
  */
 Stepper::Stepper(int motor_pin_1, int motor_pin_2)
 {
-  this->step_number = 0;      // which step the motor is on
-  this->speed = 0;            // the motor speed, in Hz
-  this->direction = 0;        // motor direction
-  this->last_step_time = 0;   // time stamp in ms of the last step taken
+  this->step_number = 0;        // which step the motor is on
+  this->speed = 0;              // the motor speed, in Hz
   this->last_step = 0;
+  this->halfstep = hstep;
 
   // Arduino pins for the motor control connection:
   this->motor_pin_1 = motor_pin_1;
@@ -57,6 +54,9 @@ Stepper::Stepper(int motor_pin_1, int motor_pin_2)
 
   // pin_count is used by the stepMotor() method:
   this->pin_count = 2;
+
+  // fix the position value pointer to 0
+  this->motor_pos_emu = 0;
 }
 #endif
 
@@ -84,11 +84,14 @@ Stepper::Stepper(int motor_pin_1, int motor_pin_2, int motor_pin_3)
   pinMode(this->motor_pin_2, OUTPUT);
   pinMode(this->motor_pin_3, OUTPUT);
 
-  // When there are only 3 pins, set the other two to 0:
+  // When there are only 3 pins, set the other one to 0:
   this->motor_pin_4 = 0;
 
   // pin_count is used by the stepMotor() method:
   this->pin_count = 3;
+
+  // fix the position value pointer to 0
+  this->motor_pos_emu = 0;
 }
 #endif
 
@@ -119,6 +122,34 @@ Stepper::Stepper(int motor_pin_1, int motor_pin_2, int motor_pin_3, int motor_pi
 
   // pin_count is used by the stepMotor() method:
   this->pin_count = 4;
+
+  // fix the position value pointer to 0
+  this->motor_pos_emu = 0;
+}
+#endif
+
+#ifdef STEPPER_EMULATION
+/*
+ * Emulation constructor.
+ * Solely operates on a memory value.
+ */
+Stepper::Stepper(volatile long *motor_pin_1 )
+{
+  this->step_number = 0;        // which step the motor is on
+  this->speed = 0;              // the motor speed, in Hz
+  this->last_step = 0;
+
+  // Arduino pins for the motor control connection:
+  this->motor_pos_emu = motor_pin_1;
+
+  // When not using any pins, set them to 0:
+  this->motor_pin_1 = 0;
+  this->motor_pin_2 = 0;
+  this->motor_pin_3 = 0;
+  this->motor_pin_4 = 0;
+
+  // pin_count is used by the stepMotor() method:
+  this->pin_count = 0;
 }
 #endif
 
@@ -145,7 +176,7 @@ int Stepper::getSlack()
   return (this->slack);
 }
 
-void Stepper::plan(int seq_number, int direction, posval_t abssteps, posval_t deltaabs, posval_t startval, unsigned int Hz)
+void Stepper::plan(int seq_number, int direction, posval_t abssteps, posval_t deltaabs, posval_t startval, unsigned int Hz, unsigned int startHz)
 {
   this->plan_direction = direction;
   this->plan_abssteps = abssteps;
@@ -156,13 +187,13 @@ void Stepper::plan(int seq_number, int direction, posval_t abssteps, posval_t de
   this->plan_seqno = seq_number;
   this->plan_active = true;
   this->plan_Hz = Hz;
+  this->plan_startHz = startHz;
 }
 
 int Stepper::getHz()
 {
   return (this->plan_Hz);
 }
-
 
 void Stepper::tick()
 {
@@ -203,6 +234,22 @@ void Stepper::update(int step_to_move)
 }
 
 /*
+ * Reset the steppers emulated position.
+ */
+void Stepper::resetEmu()
+{
+  *this->motor_pos_emu = 0;
+}
+
+/*
+ * Attach a variable to store the emulated position.
+ */
+void Stepper::attachEmu(volatile long *emu)
+{
+  this->motor_pos_emu = emu;
+}
+
+/*
  * Moves the motor forward or backwards.
  */
 void Stepper::stepMotor(int step)
@@ -212,6 +259,8 @@ void Stepper::stepMotor(int step)
   this->step_number += step;
   this->last_step = step;
 
+  if(this->motor_pos_emu)
+    *this->motor_pos_emu += step;
 
 #ifdef STEPPER_2PIN
   if (this->pin_count == 2) {

@@ -20,7 +20,9 @@
 
 /*Settings */
 boolean abs_mode = true;
-float _feedrate = 100.0; /* mm per minute*/
+
+float g0_feedrate = 100.0; /* mm per minute*/
+float g1_feedrate = 100.0; /* mm per minute*/
 
 #define DEBUG 1
 
@@ -43,6 +45,7 @@ void process_command(uint8_t *command_string)
   uint16_t k;
   float temp;
   f_PosXYZ fp;
+  unsigned int lineNo = 0;
 
 
   //the character / means delete block... used for comments and stuff.
@@ -54,30 +57,25 @@ void process_command(uint8_t *command_string)
   purge_commands(); //clear old commands
   parse_commands(command_string); //create linked list of arguments
 
+  if (command_exists('N')) 
+    lineNo = getValue('N');
+
   if (command_exists('G')) {
     code = getValue('G');
 
     switch(code) {
     case 0: //Rapid Motion
       setXYZ(&fp);
-      jumpPosXYZ (fp.x, fp.y, fp.z);
+      if (command_exists('F')) g0_feedrate = getValue('F'); //feedrate persists till changed.
+      
+
+//      jumpPosXYZ (fp.x, fp.y, fp.z);
       break;
     case 1: //Coordinated Motion
       setXYZ(&fp);
-      if (command_exists('F')) _feedrate = getValue('F'); //feedrate persists till changed.
-      movePosXYZ (fp.x, fp.y, fp.z, _feedrate);
-      break;
-//#ifdef BROKEN
-    case 2: //Coordinated Motion
-    case 3: //Coordinated Motion counterclockwise
-      float I,J;
-      setXYZ(&fp);
-      if (command_exists('F')) _feedrate = getValue('F'); //feedrate persists till changed.
-      if (command_exists('I')) I = getValue('I');
-      if (command_exists('J')) J = getValue('J');
-      arcPos((code-2), fp.x, fp.y, I, J);
-      break; 
-//#endif /*BROKEN*/   
+      if (command_exists('F')) g1_feedrate = getValue('F'); //feedrate persists till changed.
+//      movePosXYZ (fp.x, fp.y, fp.z, _feedrate);
+      break;   
     case 4: //Dwell
       delay((int)getValue('P'));
       break;
@@ -88,20 +86,13 @@ void process_command(uint8_t *command_string)
       conversionFactor = 1;  // 1 for mm 25.4 for inches      
       break;
     case 28: //go home.
-      homeXYZ();
+//      homeXYZ();
       break;
     case 30://go home via an intermediate point.
       setXYZ(&fp);
-      movePosXYZ (fp.x, fp.y, fp.z, 0);
-      movePosXYZ (0, 0, 0, 0);
-      break;
-#ifdef BROKEN
-    case 81: // drilling operation
-      setXYZ(&fp);
-      linePos (fp.x, fp.y, fp.z, _feedrate );
-      drill();
-      break;
-#endif /*BROKEN*/   
+ //     movePosXYZ (fp.x, fp.y, fp.z, 0);
+ //     movePosXYZ (0, 0, 0, 0);
+      break;  
     case 90://Absolute Positioning
       abs_mode = true;
       break;

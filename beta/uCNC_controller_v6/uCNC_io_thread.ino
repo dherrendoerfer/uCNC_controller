@@ -19,7 +19,8 @@
 
 #define COMMAND_SIZE 128
 uint8_t command_line[COMMAND_SIZE];
-uint8_t sin_count=0;
+
+uint8_t sin_count = 0;
 uint16_t no_data = 0;
 uint8_t asleep = 0;
 
@@ -29,19 +30,24 @@ void clear_command_string() {
   sin_count = 0;
 }
 
+unsigned long last_io = 0;
+
+void setupIoThread()
+{
+  last_io = millis();
+}
+
 void handleIO()
 {
     uint8_t c;
 
   //read in characters if we got them.
-  if (Serial.available() > 0)   {
+  while (Serial.available() > 0)   {
     c = (uint8_t)Serial.read();
-    no_data = 0;
     asleep = 0;
     command_line[sin_count++] = c;
-  }
-  else {
-    no_data++;
+    
+    last_io = millis();
   }
 
   if (sin_count && (c == '\n' || no_data > 100)) {
@@ -50,7 +56,7 @@ void handleIO()
     clear_command_string(); 
   }
 
-  if (no_data == 60000)  {
+  if ( (long)(millis() - last_io) >= 60000 ) {
     if (!asleep) {
       powerdown();
       asleep=1;

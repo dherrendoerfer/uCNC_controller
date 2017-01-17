@@ -40,6 +40,7 @@ void timer1_setup()
 
 void tick_handler()
 {
+  sei(); // Allow interrupts in here. 
   mStepperX.tick();
   mStepperY.tick();
   mStepperZ.tick();
@@ -56,7 +57,7 @@ ISR(TIMER1_OVF_vect)
   TCNT1 = TMVAL;
   if (!timer_idle)
     tick_handler();
-  digitalWrite(ledPin, digitalRead(ledPin) ^ 1);
+  digitalWrite(LED_PIN, digitalRead(LED_PIN) ^ 1);
 }
 
 unsigned int hzToTimer1(unsigned int Hz)

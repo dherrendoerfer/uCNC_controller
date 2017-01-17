@@ -22,6 +22,7 @@
 //#define STEPPER_2PIN 1
 #define STEPPER_3PIN 1
 #define STEPPER_4PIN 1
+#define STEPPER_EMULATION
 
 class Stepper {
   public:
@@ -38,6 +39,13 @@ class Stepper {
     Stepper(int motor_pin_1, int motor_pin_2, int motor_pin_3, int motor_pin_4, int hstep);
 #endif
 
+#ifdef STEPPER_EMULATION    
+    Stepper(volatile long *motor_pin_1);
+#endif
+
+    void resetEmu();
+    void attachEmu(volatile long *emu);
+    
     void setSpeed(int whatSpeed);
     int getSpeed();
     void setSlack(int slack);
@@ -45,18 +53,20 @@ class Stepper {
     void update(int step_to_move);
     void powerdown();
     
-    void plan(int seq_number, int direction, posval_t abssteps, posval_t deltaabs, posval_t startval, unsigned int Hz);
+    void plan(int seq_number, int direction, posval_t abssteps, posval_t deltaabs, posval_t startval, unsigned int Hz, unsigned int startHz);
     void tick();
     int getHz();
     int busy();
 
   private:
     void stepMotor(int this_step);
+    
+    volatile long *motor_pos_emu;    // pointer to the emulated stepper value
 
     int speed;                      // Speed in Hz
     int slack;                      // Slack of gears or belt
     int pin_count;                  // whether you're driving the motor with 2 or 4 pins
-    unsigned int step_number;       // which step the motor is on
+    volatile unsigned int step_number;       // which step the motor is on
     int halfstep;                   // use halfsteps (doubles steps per rotation)
 
     // motor pin numbers:
@@ -73,9 +83,10 @@ class Stepper {
     posval_t plan_deltaabs;
     posval_t plan_startval;
     unsigned int plan_Hz;
+    unsigned int plan_startHz;
 
-    int plan_active;
-    int plan_seqno;
+    volatile int plan_active;
+    volatile int plan_seqno;
 };
 
 
