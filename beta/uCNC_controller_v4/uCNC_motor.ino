@@ -444,6 +444,10 @@ void lineXYZ(posval_t x2, posval_t y2, posval_t z2, float feedrate)
   moveToXYZ(drawx, drawy, drawz, 0, 0, 0);
   laststep=micros();
   
+  if (engraver && eZ < 0.01) {
+    digitalWrite(LED_PIN,HIGH);
+  }
+  
   // dX is biggest
   if(deltaxabs >= deltayabs && deltaxabs >= deltazabs){
     for(n = 0; n < deltaxabs; n++){
@@ -469,6 +473,10 @@ void lineXYZ(posval_t x2, posval_t y2, posval_t z2, float feedrate)
       wait(laststep+stepdelay);
       laststep=micros();
       _moveToXYZ(drawx, drawy, drawz, accel, (deltaxabs == deltayabs ? accel : 0), 0);
+    }
+    if (engraver && eZ) {
+      wait(laststep+stepdelay);
+      digitalWrite(LED_PIN,LOW);
     }
     return;
   }
@@ -497,6 +505,10 @@ void lineXYZ(posval_t x2, posval_t y2, posval_t z2, float feedrate)
       laststep=micros();
       _moveToXYZ(drawx, drawy, drawz, 0, accel, 0);
     }
+    if (engraver && eZ) {
+      wait(laststep+stepdelay);
+      digitalWrite(LED_PIN,LOW);
+    }
     return;
   }
   // dZ is biggest
@@ -523,6 +535,10 @@ void lineXYZ(posval_t x2, posval_t y2, posval_t z2, float feedrate)
       wait(laststep+stepdelay);
       laststep=micros();
       _moveToXYZ(drawx, drawy, drawz, 0, 0, accel);
+    }
+    if (engraver && eZ) {
+      wait(laststep+stepdelay);
+      digitalWrite(LED_PIN,LOW);
     }
     return;
   }

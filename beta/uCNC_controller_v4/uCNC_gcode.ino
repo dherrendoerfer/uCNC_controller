@@ -60,12 +60,22 @@ void process_command(uint8_t *command_string)
     switch(code) {
     case 0: //Rapid Motion
       setXYZ(&fp);
-      jumpPosXYZ (fp.x, fp.y, fp.z);
+      if (!engraver)
+        jumpPosXYZ (fp.x, fp.y, fp.z);
+      else {
+        eZ=fp.z;
+        jumpPosXYZ (fp.x, fp.y, 0.0);
+      }
       break;
     case 1: //Coordinated Motion
       setXYZ(&fp);
       if (command_exists('F')) _feedrate = getValue('F'); //feedrate persists till changed.
-      movePosXYZ (fp.x, fp.y, fp.z, _feedrate);
+      if (!engraver)
+        movePosXYZ (fp.x, fp.y, fp.z, _feedrate);
+      else {
+        eZ=fp.z;
+        movePosXYZ (fp.x, fp.y, 0, _feedrate);
+      }
       break;
 #ifdef BROKEN
     case 2: //Coordinated Motion
@@ -182,6 +192,9 @@ void process_command(uint8_t *command_string)
       break;
     case 162:
       if (command_exists('S')) stepsPerMillimeter_Z = getValue('S');
+      break;
+    case 163:
+      if (command_exists('S')) engraver = (int)getValue('S');
       break;
 #endif /*MEM32K*/
     }

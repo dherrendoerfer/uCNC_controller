@@ -138,7 +138,11 @@ int   motorMode = 1;
 #define Z_TRIP_VAL 0.0001
 
 /* Laser LED on in mode 0 */
-//#define Z_LASERLED_IN_MODE_0 1 
+//#define Z_LASERLED_IN_MODE_0 1
+
+/*Engraver mode - ignore Z stepper and power laser only when moving*/
+int engraver = 0;
+float eZ = 0;   /* The engraver Z value*/
 
 /* X,Y,Z in absolute steps position */
 posval_t X = 0;
