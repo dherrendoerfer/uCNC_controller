@@ -1,0 +1,65 @@
+ *
+ * This file is part of uCNC_controller.
+ *
+ * Copyright (C) 2017  D.Herrendoerfer
+ *
+ *   gcode4bmps.py is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   uCNC_controller is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with uCNC_controller.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ 
+gcode4bmps.py:
+--------------
+
+Gcode for bitmaps is a very simple tool to transform bitmaps to gcode
+for raster engraving.
+
+
+Installation:
+-------------
+
+Gcode4bmps.py was developed for python2.7. It also requires the
+prior installation of the python-pillow library and it's development
+package (python-pillow-devel).
+Futhermore, to read and interpret ps, eps, and pdf files, the ghostscript
+package must be installed. (This was only tested on linux, but should work
+with windows too.)
+
+Usage:
+------
+
+Usage: gcode4bmps.py [options]
+
+Options:
+  -h, --help            				show this help message and exit
+  -i FILE, --imgfile=FILE				read image from this FILE
+  -g FILE, --gcodefile=FILE				write gcode to this FILE
+  -s STEPSIZE, --stepsize=STEPSIZE		stepsize of a single output pixel/dot (bit/laser size)
+  -x XSIZE, --xsize=XSIZE				x size of the output gcode in mm
+  -y YSIZE, --ysize=YSIZE				y size of the output gcode in mm
+  -d DPI, --dpi=DPI     				source image dpi value
+  -m DPCM, --dpcm=DPCM  				source image dpcm value
+  -n, --negative        				invert the image
+  -p PASSES, --passes=PASSES			number of passes over a line
+  -u, --upwards         				process from bottom to top
+  -z ZDOWN, --zdown=ZDOWN				value for Z axis down
+  -Z ZUPPER, --zupper=ZUPPER			value for Z axis up
+  -b, --bidirectional   				engrave in both directions
+  -B, --backlash        				compensate for backlash in unidirectional engraving
+  -f FEED1, --feed1=FEED1				set feedrate for G1 moves
+  -F FEED0, --feed0=FEED0				set feedrate for G0 moves
+  -C, --crop            				crop the image to only plot the used area
+  -G, --ghostscript     				use ghostscript to import postscript image files
+  -q, --quiet           				don't print status messages to stdout
+
+
+  						
