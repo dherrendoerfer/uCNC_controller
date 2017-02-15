@@ -1,0 +1,40 @@
+This list is work-in-progress (might be incomplete)
+
+Sample stl model files to make the Rod-Robin CNC using a 3D printer.
+
+Other needed parts list:
+
+The 3D parts in this directory according to list below.
+
+Quan.|  Item
+-----+----------------------------------------------
+ 1   | Rod-Robin-Pillar-A.stl
+ 1   | Rod-Robin-Pillar-B.stl
+ 2   | Rod-Robin-H-Base-A.stl
+ 2   | Rod-Robin-H-Base-B.stl
+ 1   | Rod-Robin-H-Base-C.stl  
+ 4   | Rod-Robin-H-Base-D.stl  
+ 2   | Rod-Robin-Table-A.stl  
+ 1   | Rod-Robin-Z-Base-A.stl  
+
+Other parts required:
+
+Quan.|  Item
+-----+----------------------------------------------
+ 7	 | 	LM5UU Linear bearings. 
+ 6   |	11x5x4 Bearings 
+ 2 	 |	NEMA 17 Stepper Motors
+ 2	 |	T2 or T2.5 belt 6mm width
+ 2	 |	T2 or T2.5 belt pulleys
+ 2   |  Microswitches
+ 4   |  5mm Stainless Steel rod 
+     |    2x for X-Axis 
+     |    2x for Y-Axis
+16	 |  M5 Threaded Rod
+many |  M5 Nuts
+ 1   |  Table board 
+     |    2 to 4mm steel or aluminium 
+ 
+Also needed:
+  Glue (Pattex Clasic)
+  Nut-Lock glue ( Locktite medium )	

@@ -1,0 +1,20 @@
+This list is work-in-progress (might be incomplete)
+
+Sample stl model files to make the Rod-Robin  Z-Axis tool holder 
+using a 3D printer.
+
+The 3D parts in this directory are needed each one once.
+
+Other parts required:
+
+Quan.|  Item
+-----+----------------------------------------------
+ 4	 | 	LM5UU Linear bearings. 
+ 1 	 |	28-BJY-48 5V Stepper Motor
+ 2   |  5mm Stainless Steel rod 
+ 1	 |  M5 Threaded Rod
+some |  M5 Nuts
+ 
+Also needed:
+  Glue (Pattex Clasic)
+  Nut-Lock glue ( Locktite medium )	
