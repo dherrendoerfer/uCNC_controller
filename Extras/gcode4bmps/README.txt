@@ -21,8 +21,9 @@ gcode4bmps.py:
 --------------
 
 Gcode for bitmaps is a very simple tool to transform bitmaps to gcode
-for raster engraving.
-
+for raster engraving. (Engraving line by line, not vector-style)
+Images read are converted to grayscale and then interpreted as black
+and white (trip value 128).
 
 Installation:
 -------------
@@ -36,6 +37,30 @@ with windows too.)
 
 Usage:
 ------
+
+Basic usage:
+
+./gcode4bmps.py  -d 300 -i test/tux-bw.gif
+
+This will read the image and generate g-code to engrave it. The output
+will be written to output.nc in the current directory (default, unless specified)
+You need to supply at least one of:
+	- Output size with -x and -y (in mm)
+	- Source image DPI with -d 
+	- Source image DPCM (dots per cm) with -m 
+
+You can specify the output file name with -g ( '-g -' for standard out, implies using -q )
+
+Using postcsript or pdf:
+------------------------
+
+/gcode4bmps.py -G -C -d 300 -i test/tux-bw.pdf
+
+Use the -G option to turn on ghostscript transcoding, and also use
+the -C option to crop the resulting image (ghostscript output is always a page)
+
+
+Options available:
 
 Usage: gcode4bmps.py [options]
 
