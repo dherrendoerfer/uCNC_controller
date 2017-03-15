@@ -164,13 +164,13 @@ def main(argv):
             print imgfile_extension
             sys.exit(1)
         else:
-            retval = os.system("gs -o tmp_output.png -sDEVICE=png256 -r300 "+options.imagefile+" &> /dev/null")
+            retval = os.system("gs -o tmp_output.png -sDEVICE=png256 -r600 "+options.imagefile+" &> /dev/null")
             if retval != 0:
                 print "using ghostscript failed. Cannot continue !"
                 sys.exit(1)
             else:
                 options.imagefile = "tmp_output.png"
-                options.dpi = "300"
+                options.dpi = "600"
  
     if options.verbose:
         print "+ Opening image file " + options.imagefile + "." 
@@ -278,14 +278,17 @@ def main(argv):
     engraver_log("                 Y:" + str(ysize), target)
     engraver_log("  Lines          Y:" + str(int(ylines)), target)
     
-    
     engraver_log("", target)
+
+    target.write("G1 Z%0.2f\n" % (options.zupper))
 
     if options.feed0 != 0:
         engraver_g0f(0, 0, options.feed0, target)
     if options.feed1 != 0:
         engraver_g1f(0, 0, options.feed1, target)
         
+    engraver_g0(0, ypos, target)
+
     for line in range(0, int(ylines)):
         if options.upwards:
             pixline = yimgsize - 1 - int((yimgsize / ylines) * line ) 
