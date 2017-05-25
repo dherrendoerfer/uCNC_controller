@@ -1,0 +1,25 @@
+Included here is a prototype layout for a controller circuit.
+
+The uControl board is different from the previous versions and 
+requires a different firmware than the other versions.
+
+Features are:
+--------------
+Support for 3 bipolar steppers using A4988 Polulu driver modules.
+Support for 1 servo
+Support for 8 input lines 6 bare, 2 as switch inputs
+Support for 1 high load output (5A/PWM)
+Support for breakout of serial and reset lines
+
+uControl_v1.sch
+----------------
+  The layout schematic file
+
+uControl_v1.brd
+----------------
+  The layout source file (just the layout)
+
+uControl_v1.ps, uControl_v1.pdf
+--------------------------------
+  Exported layout formats of the above board
+

@@ -1,0 +1,22 @@
+COLORMIXEXTRUDER:
+
+This is the attempt to build a simple color mixing
+extruder driver board and controller to drive a 
+diamond extruder without modifying an existing 
+3D printers driver board to support more stepper
+drivers.
+
+The signals of the stepper controller board from
+the 3D printers extruder stepper are passed to the 
+controller as well as the serial data comming from
+the PC.
+
+The controller scans the incommming serial g-code 
+data for occurences of the TXX code and sets the
+desired color for that tool.
+
+This has been designed for my uControl_v1 driver 
+board but should be easily adapted for other driver
+boards.
+
+This is alpha software - expect it to be broken.
