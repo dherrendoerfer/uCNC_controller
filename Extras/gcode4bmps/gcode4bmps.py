@@ -35,7 +35,7 @@ def engraver_down(xpos,ypos,depth,target):
         target.write("G0 X%0.4f Y%0.4f\n" % (xpos,ypos))
     else:
         target.write("G0 X%0.4f\n" % (xpos))
-    target.write("G1 Z%0.2f\n" % (depth))
+    target.write("G1 Z%0.2f\n" % (float(depth)))
     lastypos = ypos
 
 def engraver_up(xpos,ypos,depth,target):
@@ -44,7 +44,7 @@ def engraver_up(xpos,ypos,depth,target):
         target.write("G1 X%0.4f Y%0.4f\n" % (xpos,ypos))
     else:
         target.write("G1 X%0.4f\n" % (xpos))
-    target.write("G1 Z%0.2f\n" % (depth))
+    target.write("G1 Z%0.2f\n" % (float(depth)))
     lastypos = ypos
 
 
@@ -290,7 +290,7 @@ def main(argv):
     
     engraver_log("", target)
 
-    target.write("G1 Z%0.2f\n" % (options.zupper))
+    target.write("G1 Z%0.2f\n" % (float(options.zupper)))
 
     if options.feed0 != 0:
         engraver_g0f(0, 0, options.feed0, target)
