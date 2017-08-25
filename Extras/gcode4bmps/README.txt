@@ -32,8 +32,8 @@ Gcode4bmps.py was developed for python2.7. It also requires the
 prior installation of the python-pillow library and it's development
 package (python-pillow-devel).
 Futhermore, to read and interpret ps, eps, and pdf files, the ghostscript
-package must be installed. (This was only tested on linux, but should work
-with windows too.)
+package must be installed. (This was only tested on Linux, but should work
+with Windows too.)
 
 Usage:
 ------
@@ -51,7 +51,7 @@ You need to supply at least one of:
 
 You can specify the output file name with -g ( '-g -' for standard out, implies using -q )
 
-Using postcsript or pdf:
+Using postscript or pdf:
 ------------------------
 
 /gcode4bmps.py -G -C -d 300 -i test/tux-bw.pdf
@@ -82,6 +82,7 @@ Options:
   -B, --backlash        				compensate for backlash in unidirectional engraving
   -f FEED1, --feed1=FEED1				set feedrate for G1 moves
   -F FEED0, --feed0=FEED0				set feedrate for G0 moves
+  -M speed, --spindle=speed             enable insertion of spindle start and stop with selected speed
   -C, --crop            				crop the image to only plot the used area
   -G, --ghostscript     				use ghostscript to import postscript image files
   -q, --quiet           				don't print status messages to stdout

@@ -24,8 +24,10 @@ import os
 import sys
 from optparse import OptionParser
 
-versionstring = "v0.95-beta"
+versionstring = "v0.96-beta"
 lastypos = 0.0
+
+commentstring = ";"
 
 def engraver_down(xpos,ypos,depth,target):
     global lastypos
@@ -47,7 +49,7 @@ def engraver_up(xpos,ypos,depth,target):
 
 
 def engraver_log(text,target):
-    target.write("/ %s\n" % (text))
+    target.write("%s %s\n" % (commentstring,text))
 
 def engraver_g0f(xpos,ypos,feedrate,target):
     global lastypos
@@ -63,6 +65,12 @@ def engraver_g1f(xpos,ypos,feedrate,target):
     global lastypos
     target.write("G1 X%0.4f Y%0.4f F%d\n" % (xpos,ypos,int(feedrate)))
     lastypos = ypos
+
+def engraver_m3s(spindle,target):
+    target.write("M3 S%d\n" % (int(spindle)))
+
+def engraver_m5(target):
+    target.write("M5\n")
 
 def getcroparea(px,ximgsize,yimgsize):
     x1bound = ximgsize
@@ -133,6 +141,8 @@ def main(argv):
                       help="set feedrate for G1 moves")
     parser.add_option("-F", "--feed0", dest="feed0", default=0,
                       help="set feedrate for G0 moves")
+    parser.add_option("-M", "--spindle", dest="spindle", default=0,
+                      help="enable insertion of spindle start and stop with selected speed")
     parser.add_option("-C", "--crop",
                       action="store_true", dest="crop", default=False,
                       help="crop the image to only plot the used area")
@@ -286,6 +296,8 @@ def main(argv):
         engraver_g0f(0, 0, options.feed0, target)
     if options.feed1 != 0:
         engraver_g1f(0, 0, options.feed1, target)
+    if options.spindle != 0:
+        engraver_m3s(options.spindle, target)
         
     engraver_g0(0, ypos, target)
 
@@ -352,6 +364,9 @@ def main(argv):
             
         ypos = ypos + yinc
         
+    if options.spindle != 0:
+        engraver_m5(target)
+
     if target != sys.stdout:
         target.close()
 
