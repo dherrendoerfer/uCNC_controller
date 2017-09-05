@@ -24,7 +24,7 @@ import os
 import sys
 from optparse import OptionParser
 
-versionstring = "v0.96-beta"
+versionstring = "v0.97-alpha"
 lastypos = 0.0
 
 commentstring = ";"
@@ -72,6 +72,29 @@ def engraver_m3s(spindle,target):
 def engraver_m5(target):
     target.write("M5\n")
 
+def generate_cutout(xsize,ysize,zdown,zupper,stepsize,depth,target):
+    pos0x = 0 - 3 * float(stepsize)
+    pos0y = 0 - 3 * float(stepsize)
+    
+    pos1x = xsize + 3 * float(stepsize)
+    pos1y = ysize + 3 * float(stepsize)
+    loops = int(float(depth) / float (zdown))
+
+    pos0z = 0
+
+    target.write("G0 X%0.4f Y%0.4f\n" % (pos0x,pos0y))
+
+    for z in range(0,loops):
+        pos0z += float(zdown)
+        target.write("G1 Z%0.2f\n" % (float(pos0z)))
+
+        target.write("G1 X%0.4f\n" % (pos1x))
+        target.write("G1 Y%0.4f\n" % (pos1y))
+        target.write("G1 X%0.4f\n" % (pos0x))
+        target.write("G1 Y%0.4f\n" % (pos0y))
+
+    target.write("G1 Z%0.2f\n" % (float(zupper)))
+
 def getcroparea(px,ximgsize,yimgsize):
     x1bound = ximgsize
     x2bound = 0
@@ -110,7 +133,7 @@ def main(argv):
     parser.add_option("-g", "--gcodefile", dest="gcodefile", default="output.nc",
                       help="write gcode to this FILE", metavar="FILE")
     parser.add_option("-s", "--stepsize", dest="stepsize", default=0.1,
-                      help="stepsize of a single output pixel/dot (bit/laser size)")
+                      help="stepsize of a single output pixel/dot (envraver/laser size) in mm")
     parser.add_option("-x", "--xsize", dest="xsize", default=0,
                       help="x size of the output gcode in mm")
     parser.add_option("-y", "--ysize", dest="ysize", default=0, 
@@ -149,7 +172,14 @@ def main(argv):
     parser.add_option("-G", "--ghostscript",
                       action="store_true", dest="ghostscript", default=False,
                       help="use ghostscript to import postscript image files")
-    
+    parser.add_option("-D", "--gsDPI", dest="gsdpi", default=200,
+                      help="DPI to use for ghostscript imported postscript image files")
+    parser.add_option("-U", "--useSforDPI", 
+                      action="store_true", dest="usedpi", default=False,
+                      help="Calculate DPI to use for ghostscript from engraver size")
+    parser.add_option("", "--cutout", dest="cutout", default=0,
+                      help="Generate a cutout frame around the image with given depth in mm")
+
     parser.add_option("-q", "--quiet",
                       action="store_false", dest="verbose", default=True,
                       help="don't print status messages to stdout")
@@ -164,6 +194,9 @@ def main(argv):
         print "You need to (at least) specify an image file."
         print "Try " +argv[0]+ " -h" 
         sys.exit(1)
+
+    if options.usedpi:
+        options.gsdpi=str(int(round( 25.4 / float(options.stepsize))))
  
     imgfilename, imgfile_extension = os.path.splitext(options.imagefile)
     
@@ -174,13 +207,13 @@ def main(argv):
             print imgfile_extension
             sys.exit(1)
         else:
-            retval = os.system("gs -o tmp_output.png -sDEVICE=png256 -r600 "+options.imagefile+" &> /dev/null")
+            retval = os.system("gs -o tmp_output.png -sDEVICE=png256 -r"+str(options.gsdpi)+" "+options.imagefile+" &> /dev/null")
             if retval != 0:
                 print "using ghostscript failed. Cannot continue !"
                 sys.exit(1)
             else:
                 options.imagefile = "tmp_output.png"
-                options.dpi = "600"
+                options.dpi = options.gsdpi
  
     if options.verbose:
         print "+ Opening image file " + options.imagefile + "." 
@@ -363,11 +396,17 @@ def main(argv):
                     engraver_up(pixelcolumn*xpixelwidth, ypos, options.zupper, target)
             
         ypos = ypos + yinc
+
+    if options.cutout != 0:
+        engraver_log("cutout", target)
+        generate_cutout(xsize,ysize,options.zdown,options.zupper,options.stepsize,options.cutout,target)
         
     if options.spindle != 0:
+        engraver_log("spindle off", target)
         engraver_m5(target)
 
     if target != sys.stdout:
+        engraver_log("end", target)
         target.close()
 
     if options.verbose:
