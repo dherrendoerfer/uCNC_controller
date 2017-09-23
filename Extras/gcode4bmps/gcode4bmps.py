@@ -28,23 +28,32 @@ versionstring = "v0.97-alpha"
 lastypos = 0.0
 
 commentstring = ";"
+options = {}
 
 def engraver_down(xpos,ypos,depth,target):
+    global options
     global lastypos
     if lastypos != ypos:
         target.write("G0 X%0.4f Y%0.4f\n" % (xpos,ypos))
     else:
         target.write("G0 X%0.4f\n" % (xpos))
-    target.write("G1 Z%0.2f\n" % (float(depth)))
+    if options.engraver:
+        target.write("M03\n")
+    else:
+        target.write("G1 Z%0.2f\n" % (float(depth)))
     lastypos = ypos
 
 def engraver_up(xpos,ypos,depth,target):
+    global options
     global lastypos
     if lastypos != ypos:
         target.write("G1 X%0.4f Y%0.4f\n" % (xpos,ypos))
     else:
         target.write("G1 X%0.4f\n" % (xpos))
-    target.write("G1 Z%0.2f\n" % (float(depth)))
+    if options.engraver:
+        target.write("M05\n")
+    else:
+        target.write("G1 Z%0.2f\n" % (float(depth)))
     lastypos = ypos
 
 
@@ -67,7 +76,11 @@ def engraver_g1f(xpos,ypos,feedrate,target):
     lastypos = ypos
 
 def engraver_m3s(spindle,target):
-    target.write("M3 S%d\n" % (int(spindle)))
+    global options
+    if options.engraver:
+        target.write("M5 S%d\n" % (int(spindle)))
+    else:
+        target.write("M3 S%d\n" % (int(spindle)))
 
 def engraver_m5(target):
     target.write("M5\n")
@@ -126,6 +139,7 @@ def getcroparea(px,ximgsize,yimgsize):
 
 def main(argv):
     global versionstring
+    global options
     # Main function everything starts here
     parser = OptionParser()
     parser.add_option("-i", "--imgfile", dest="imagefile", 
@@ -179,6 +193,8 @@ def main(argv):
                       help="Calculate DPI to use for ghostscript from engraver size")
     parser.add_option("", "--cutout", dest="cutout", default=0,
                       help="Generate a cutout frame around the image with given depth in mm")
+    parser.add_option("", "--engraver", action="store_true", dest="engraver", default=False,
+                      help="Generate output for a laser engraver, M codes turn the laser on and off")
 
     parser.add_option("-q", "--quiet",
                       action="store_false", dest="verbose", default=True,
@@ -311,7 +327,7 @@ def main(argv):
         invocation += tmp + " "
     engraver_log("Invoked as:", target)
     engraver_log("", target)
-    engraver_log("  " + invocation, target)
+    engraver_log("  gcode4bmps.py " + invocation, target)
     engraver_log("", target)
     engraver_log("Image information:", target)
     engraver_log("  Size in pixels X:" + str(ximgsize), target)
