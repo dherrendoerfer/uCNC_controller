@@ -107,6 +107,21 @@ Stepper myStepperZ(18,19,17,16,0);
 #define ENDSW_PIN  A0   //Start/End Switch input
 #endif
 
+#ifdef V1_BOARD_COMPACT
+Stepper myStepperX(7,9,8,10,0);
+Stepper myStepperY(3,5,4,6,0);            
+Stepper myStepperZ(16,19,15,17,0);
+
+/* General purpose outputs */
+#define LED_PIN    13   //LED/LASER output
+#define LASER_PIN  11   //LED/LASER output
+//#define GP1_PIN     2   //General pupose (coolant 1) output
+//#define GP2_PIN     3   //General pupose (coolant 2) output
+//#define GP3_PIN    -1   //General pupose
+#define SERVO_PIN  12   //Servo output
+#define ENDSW_PIN  A6   //Start/End Switch input
+#endif
+
 #ifdef GRBL_BOARD
 Stepper myStepperX(5,2,8);
 Stepper myStepperY(6,3,8);            
