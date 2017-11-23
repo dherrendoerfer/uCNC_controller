@@ -222,8 +222,13 @@ void powerdown()
 
 void updateMotorCodes()
 {
+#ifdef GP1_PIN
   digitalWrite(GP1_PIN,(coolant1 == 1) ? HIGH : LOW);
+#endif
+
+#ifdef GP2_PIN
   digitalWrite(GP2_PIN,(coolant2 == 1) ? HIGH : LOW);
+#endif
 
 #ifdef DIR_PIN
   digitalWrite(DIR_PIN,(spindle > 1) ? HIGH : LOW);
