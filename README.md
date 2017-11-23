@@ -1,4 +1,4 @@
-Copyright (C) 2014,2015,2016 D.Herrendoerfer 
+Copyright (C) 2014,2015,2016,2017 D.Herrendoerfer 
 
 # uCNC_controller: A small Arduino CNC
 
@@ -29,6 +29,12 @@ alt="Direct ink to PCB CNC Plotter" width="240" height="180" border="10" /></a>
 Also, feel free to check out my [YouTube Channel](https://www.youtube.com/channel/UCe9XrOQuQR8SzbB_zRUIf0w "Dirk Herrendoerfers YouTube Channel")
 all the source code and project files from the projects  
 featured on the channel are hosted here.
+
+### Ready to order PCBs for uCNC_Controller
+The circuit boards for the uCNC projects are available for viewing at the EasyEDA online PCB design 
+web site and can be ordered directly through JCLPCB from that site. 
+
+The direct link to my project space on EasyEDA is [https://easyeda.com/dherrendoerfer](https://easyeda.com/dherrendoerfer "Dirk Herrendoerfers EasyEDA Projects")
 
 ## Notes
 - The beta directory contains pre-release versions of the controller firmware.

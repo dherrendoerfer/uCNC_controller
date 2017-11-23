@@ -2,6 +2,9 @@ Copyright (C) 2014,2015,2016 D.Herrendoerfer
 
 This directory contains additional files for uCNC_controller
 
+Note:
+PCB layouts now also available here: https://easyeda.com/dherrendoerfer 
+
 Controller
 ----------
   The this directory contains the files to recreate a controller
@@ -40,3 +43,10 @@ Plotter_v3
 ----------
   This directory contains the files to recreate a simple plotter that
   can be used with the uCNC_controller firmware.
+
+Plotter_v4
+----------
+  This directory contains the files to recreate a simple plotter that
+  can be used with the uCNC_controller firmware. This one uses NEMA 17 
+  steppers.
+  
