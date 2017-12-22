@@ -312,7 +312,7 @@ void Stepper::stepMotor(int step)
 #endif
 }   
 
-void Stepper::powerdown()
+void Stepper::powerdwn()
 {
 #ifdef STEPPER_2PIN
   if (this->pin_count == 2) {
@@ -335,6 +335,17 @@ void Stepper::powerdown()
   }
 #endif
 }
+
+void Stepper::powerup()
+{
+#ifdef STEPPER_3PIN
+  if (this->pin_count == 3) {
+      /* Pull enable pin HIGH*/
+      digitalWrite(motor_pin_3, LOW);
+  }
+#endif
+}
+
 
 void Stepper::home(unsigned int switch_input, unsigned long home_steps, unsigned long out_steps, int direction, unsigned int speed)
 {

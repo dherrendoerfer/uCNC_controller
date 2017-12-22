@@ -215,9 +215,9 @@ int moveZ(posval_t dZ, char *px, char *py, char *pz)
 
 void powerdown()
 {
-  myStepperX.powerdown();
-  myStepperY.powerdown();
-  myStepperZ.powerdown();
+  myStepperX.powerdwn();
+  myStepperY.powerdwn();
+  myStepperZ.powerdwn();
 }
 
 void updateMotorCodes()

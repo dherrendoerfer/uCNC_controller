@@ -23,11 +23,6 @@
 /* Version of this progam */
 float uCNC_Version = 1.99;
 
-/* Version of the controller board in use.*/
-#define V1_BOARD 1
-//#define V4_BOARD 1
-//#define GRBL_BOARD 1
-
 /* Development functions - broken code */
 //#define BUILTIN 1
 //#define BROKEN 1
@@ -52,18 +47,19 @@ float uCNC_Version = 1.99;
    freqency, which is the start step rate in HZ.
    The ramp rise is set with the Ramp value */
 float stepsPerMillimeter_X = 80;
-int   stepIssueFrequency_X  = 400;
+int   stepIssueFrequency_X  = 100;
 int   stepIssueFreqRamp_X = 10;
 int   stepIssueFrequencyRampMax_X  = 200;
 int   stepDriveSlack_X = 0;
 
 float stepsPerMillimeter_Y = 80;
-int   stepIssueFrequency_Y  = 400;
+int   stepIssueFrequency_Y  = 200;
 int   stepIssueFreqRamp_Y = 10;
 int   stepIssueFrequencyRampMax_Y  = 200;
 int   stepDriveSlack_Y = 0;
 
-float stepsPerMillimeter_Z = 80;
+/* Z-Axis even if you are using a stepper, use vaild values */
+float stepsPerMillimeter_Z = 20;
 int   stepIssueFrequency_Z  = 100;
 int   stepIssueFreqRamp_Z = 0;
 int   stepIssueFrequencyRampMax_Z  = 0;
@@ -78,64 +74,12 @@ float conversionFactor = 1;  // 1 for mm 25.4 for inches
    are using, there are big diffenences here.
    Refer to the code in uCNC_stepper.cpp to understand
    the code, and and make the right choices here. */
-#ifdef V4_BOARD
-Stepper myStepperX(10,11,7);
-Stepper myStepperY(8,9,7);            
-//Stepper myStepperZ(2,4,7);            
-Stepper myStepperZ(18,16,17,19,0);
 
-/* General purpose outputs */
-#define LED_PIN    13   //LED/LASER output
-#define GP1_PIN     6   //General pupose (coolant 1) output
-#define GP2_PIN     5   //General pupose (coolant 2) output
-#define GP3_PIN     3   //General pupose
-#define SERVO_PIN  12   //Servo output
-#define ENDSW_PIN  A0   //Start/End Switch input
-#endif
+/* Version of the controller board in use.*/
+#include "v1_board.h"
 
-#ifdef V1_BOARD
-Stepper myStepperX(8,10,9,11,0);
-Stepper myStepperY(4,6,5,7,0);            
-Stepper myStepperZ(18,19,17,16,0);
-
-/* General purpose outputs */
-#define LED_PIN    13   //LED/LASER output
-#define GP1_PIN     2   //General pupose (coolant 1) output
-#define GP2_PIN     3   //General pupose (coolant 2) output
-#define GP3_PIN    -1   //General pupose
-#define SERVO_PIN  12   //Servo output
-#define ENDSW_PIN  A0   //Start/End Switch input
-#endif
-
-#ifdef V1_BOARD_COMPACT
-Stepper myStepperX(7,9,8,10,0);
-Stepper myStepperY(3,5,4,6,0);            
-Stepper myStepperZ(16,19,15,17,0);
-
-/* General purpose outputs */
-#define LED_PIN    13   //LED/LASER output
-#define LASER_PIN  11   //LED/LASER output
-//#define GP1_PIN     2   //General pupose (coolant 1) output
-//#define GP2_PIN     3   //General pupose (coolant 2) output
-//#define GP3_PIN    -1   //General pupose
-#define SERVO_PIN  12   //Servo output
-#define ENDSW_PIN  A6   //Start/End Switch input
-#endif
-
-#ifdef GRBL_BOARD
-Stepper myStepperX(5,2,8);
-Stepper myStepperY(6,3,8);            
-Stepper myStepperZ(7,4,8);            
-
-/* General purpose outputs */
-#define LED_PIN    12   //LED/LASER output
-#define DIR_PIN    13   //LED/LASER output
-#define GP1_PIN    A3   //General pupose (coolant 1) output
-#define GP2_PIN    A4   //General pupose (coolant 2) output
-#define GP3_PIN    A2   //General pupose
-#define SERVO_PIN  A5   //Servo output
-#define ENDSW_PIN  A6   //Start/End Switch input
-#endif
+/* Mode selector for the motors (see documentation) */
+int   motorMode = 1;
 
 /* Servo functions and limits */
 Servo myServo;
@@ -144,9 +88,6 @@ int servoPosMax=83;
 int servoPosMin=70;
 int servoToolInc=10;
 float servoPosZfactor=1.0;
-
-/* Mode selector for the motors (see documentation) */
-int   motorMode = 1;
 
 /* Important value for laser and servo mode defines the height
    at which the laser is turned on */

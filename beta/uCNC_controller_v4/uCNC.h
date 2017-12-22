@@ -47,7 +47,8 @@ class Stepper {
     void setSpeed(int whatSpeed);
     void setSlack(int slack);
     void update(int step_to_move);
-    void powerdown();
+    void powerdwn();
+    void powerup();
     void home(unsigned int, unsigned long, unsigned long, int, unsigned int);
     void step(unsigned long, unsigned int);
 
