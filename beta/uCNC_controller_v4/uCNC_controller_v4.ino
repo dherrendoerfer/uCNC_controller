@@ -68,15 +68,11 @@ int   stepDriveSlack_Z = 0;
 /* Unit conversion factor */
 float conversionFactor = 1;  // 1 for mm 25.4 for inches
 
-/* Stepper library initialization 
-   README:
-   Depending on the type of control board you
-   are using, there are big diffenences here.
-   Refer to the code in uCNC_stepper.cpp to understand
-   the code, and and make the right choices here. */
-
-/* Version of the controller board in use.*/
+/* Version of the controller board in use. Pick the one you are using*/
 #include "v1_board.h"
+//#include "v1c_board.h"
+//#include "v4_board.h"
+//#include "grbl_board.h"
 
 /* Mode selector for the motors (see documentation) */
 int   motorMode = 1;
