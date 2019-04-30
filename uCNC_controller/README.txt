@@ -64,7 +64,7 @@ Control ports:
 Device-specific G-Code commands:
 ================================
   NOTE: All of these settings can be made in the source code of the
-        controller applivation, and should in fact be made there.
+        controller application, and should in fact be made there.
         The possibility to change them is intended to make it possible
         to create a controller module that can be shared between 
         several installations, and that is configured by the init
@@ -137,26 +137,26 @@ Sets the ratio between the Z value and the servo position in degrees.
 M160: Set X-Axis step to mm ratio
 ---------------------------------
 Sets the calibration value of the X-Axis in relation to the steps needed to
-travel 1 milimeter. The sign of this value determines the direction of the 
+travel 1 millimeter. The sign of this value determines the direction of the 
 stepper.
 
   Sample:
-    M160 S17.1  ;Sets the ratio of the X-Axis to 17.1 steps per milimeter
+    M160 S17.1  ;Sets the ratio of the X-Axis to 17.1 steps per millimeter
 
 M161: Set Y-Axis step to mm ratio
 ---------------------------------
 Sets the calibration value of the Y-Axis in relation to the steps needed to
-travel 1 milimeter. The sign of this value determines the direction of the 
+travel 1 millimeter. The sign of this value determines the direction of the 
 stepper.
 
   Sample:
-    M161 S17.1  ;Sets the ratio of the Y-Axis to 17.1 steps per milimeter
+    M161 S17.1  ;Sets the ratio of the Y-Axis to 17.1 steps per millimeter
 
 M162: Set Z-Axis step to mm ratio
 ---------------------------------
 Sets the calibration value of the Z-Axis in relation to the steps needed to
-travel 1 milimeter. The sign of this value determines the direction of the 
+travel 1 millimeter. The sign of this value determines the direction of the 
 stepper.
 
   Sample:
-    M162 S17.1  ;Sets the ratio of the X-Axis to 17.1 steps per milimeter
+    M162 S17.1  ;Sets the ratio of the X-Axis to 17.1 steps per millimeter
