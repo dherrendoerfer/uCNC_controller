@@ -43,3 +43,9 @@ The direct link to my project space on EasyEDA is [https://easyeda.com/dherrendo
 - Recommended are 32k of flash memory.  
 - Among the supported boards are: Arduino Uno, Arduino Nano, Arduino Mega 2560, and many more.
 - This is work-in-progress. Check back frequently.
+
+
+Donations:  
+If you would like to make a donation to keep this project and others going you can do so at:  
+https://www.paypal.me/dherrendoerfer  
+This helps a lot !
